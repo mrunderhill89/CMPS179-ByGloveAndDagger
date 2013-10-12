@@ -17,19 +17,9 @@ package
       private function init(e:Event = null):void
       {
          removeEventListener(Event.ADDED_TO_STAGE, init);
-         // entry point
-		 var greeting:TextField = new TextField();
-		 greeting.text = "Hello World!";
-		 greeting.x = 100;
-		 greeting.y = 100;
-		 addChild(greeting);
-		 //Set up factions.
-		 var player:Faction = new Faction();
-		 var guards:Faction = new Faction();
-		 var current:Faction = player;
-		 //Main loop:
+		 var game:Game = new Game();
+		 addChild(game);
+		 game.Main();
+	  }
 	}
-	
-	
-   }
 }
