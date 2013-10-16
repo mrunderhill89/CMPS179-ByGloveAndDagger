@@ -5,7 +5,7 @@
 	import flashx.textLayout.elements.ListElement;
 	import flash.geom.Point;
 	import flash.text.TextField;
-	
+	import flash.events.Event;
 	
 	public class tile_default extends SimpleButton {
 		
@@ -28,17 +28,26 @@
 		protected var text:TextField;
 		
 		public function tile_default() {
+			if (stage) {
+				initialize();
+			} else {
+				addEventListener(Event.ADDED_TO_STAGE,initialize);
+			}
 			id = index;
+		}
+		
+		private function initialize(e:Event = null):void {
+			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			index++;
 			//Find tile elements and store them here.
 			var point:Point = new Point(x, y);			
-			/*var myElements:Array = stage.getObjectsUnderPoint(point);
+			var myElements:Array = stage.getObjectsUnderPoint(point);
 			for (var el in myElements) {
 				if (el != null){
 					trace(id + el + " => " + myElements[el]);
 				}
 			}
-			*/
+			
 			
 			//Find Neighboring Tiles
 			var n_x:Number;
