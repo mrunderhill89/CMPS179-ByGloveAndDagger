@@ -11,6 +11,7 @@
 	import flash.display.DisplayObject;
 	import flash.utils.getQualifiedClassName;
 	import flash.display.MovieClip;
+	import flash.geom.ColorTransform;
 	
 	public class tile_default extends SimpleButton {
 		
@@ -61,19 +62,19 @@
 			var n_x:Number;
 			var n_y:Number;
 			var objectsAt:Array;
-			trace("Begin neighbor search, tile:" + id);
-			trace("Position:" + point);
+			//trace("Begin neighbor search, tile:" + id);
+			//trace("Position:" + point);
 			for(var d:int = 0; d < 4; d++){
 				n_x = x + (X_SIZE * COORDS[d][0]);
 				n_y = y + (Y_SIZE * COORDS[d][1]);
-				trace ( COORDICONS[d] + ":" + new Point(n_x, n_y));
+				//trace ( COORDICONS[d] + ":" + new Point(n_x, n_y));
 				for (var t in tiles){
 					var tile:tile_default = tiles[t];
 					if (tile != null && tile != this){
 						if (tile.x == n_x && tile.y == n_y){
 							this.neighbors[d] = tile;
 							tile.neighbors[OPPOSITES[d]] = this;
-							trace(id + ">" + COORDICONS[d] + ">" + t);
+							//trace(id + ">" + COORDICONS[d] + ">" + t);
 						}
 					}
 				}
@@ -83,17 +84,23 @@
 			text.selectable = false;
 			parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-			addEventListener( MouseEvent.MOUSE_OVER, this._onMouseOver );
+			this.stage.addEventListener( MouseEvent.MOUSE_OVER, _onMouseOver );
+			this.stage.addEventListener( MouseEvent.MOUSE_OUT, _onMouseOut );
 		}
 		
 		private function _onMouseOver( e:MouseEvent): void
 		{
+			trace(e.target);
 			var myColorTransform = new ColorTransform();
-			myColorTransform.color = 0xFFFFFF;
+			myColorTransform.color = 0x1133FF;
 			this.transform.colorTransform = myColorTransform;
-			trace("hello!");
 		}
 		
+		private function _onMouseOut( e:MouseEvent): void
+		{
+			trace(e.target);
+			this.transform.colorTransform = new ColorTransform();
+		}
 		private function _onUpdate( e:Event ):void
 		{
 		}
