@@ -25,6 +25,14 @@ package
 	protected var guards:Faction;
 	protected var current:Faction;
 	
+	public function Game() : void {
+		if(stage) {
+			initialize();
+		} else {
+			addEventListener(Event.ADDED_TO_STAGE,initialize);
+		}
+	} 
+	
 	private function _onUpdate( e:Event ):void
 		{
 			current.updateTurn();
@@ -39,14 +47,7 @@ package
 				current = player;
 			}
 		}
-	public function Game() : void {
-		if(stage) {
-			initialize();
-		} else {
-			addEventListener(Event.ADDED_TO_STAGE,initialize);
-		}
-	} 
-
+	
     private function initialize(e:Event = null):void {
         removeEventListener(Event.ADDED_TO_STAGE, initialize);
 					//Debug text field allows us to see what's going on.
