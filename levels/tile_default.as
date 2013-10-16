@@ -1,11 +1,13 @@
 ﻿package  {
 	
 	import flash.display.SimpleButton;
+	import flash.events.MouseEvent;
 	import flashx.textLayout.formats.Float;
 	import flashx.textLayout.elements.ListElement;
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.display.DisplayObject;
 	import flash.utils.getQualifiedClassName;
 	import flash.display.MovieClip;
@@ -78,8 +80,18 @@
 			}
 			text.x = x;
 			text.y = y;
+			text.selectable = false;
 			parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
+			addEventListener( MouseEvent.MOUSE_OVER, this._onMouseOver );
+		}
+		
+		private function _onMouseOver( e:MouseEvent): void
+		{
+			var myColorTransform = new ColorTransform();
+			myColorTransform.color = 0xFFFFFF;
+			this.transform.colorTransform = myColorTransform;
+			trace("hello!");
 		}
 		
 		private function _onUpdate( e:Event ):void
