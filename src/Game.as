@@ -24,7 +24,8 @@ package
  	protected var player:Faction;
 	protected var guards:Faction;
 	protected var current:Faction;
-	
+	protected var loader:Loader;
+
 	public function Game() : void {
 		if(stage) {
 			initialize();
@@ -36,6 +37,9 @@ package
 	private function _onUpdate( e:Event ):void
 		{
 			current.updateTurn();
+			if (loader != null) {
+				loader.x -= 10;
+			}
 		}
 		
 		// call this when a faction has completed their turn
@@ -57,7 +61,7 @@ package
 			debug.y = 0;
 			addChild(debug);
 			//Set up level.
-			var loader:Loader = new Loader();
+			loader = new Loader();
 			addChild(loader);
 			var url:URLRequest = new URLRequest("../levels/level1.swf");
 			var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);

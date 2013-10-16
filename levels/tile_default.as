@@ -79,6 +79,13 @@
 			text.x = x;
 			text.y = y;
 			stage.addChild(text);
+			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
+		}
+		
+		private function _onUpdate( e:Event ):void
+		{
+			text.x = x;
+			text.y = y;
 		}
 	}
 }
