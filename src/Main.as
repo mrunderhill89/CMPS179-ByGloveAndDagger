@@ -19,7 +19,6 @@ package
          removeEventListener(Event.ADDED_TO_STAGE, init);
 		 var game:Game = new Game();
 		 addChild(game);
-		 game.Main();
 	  }
 	}
 }

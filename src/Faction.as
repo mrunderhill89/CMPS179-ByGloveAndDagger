@@ -11,9 +11,10 @@ package
 		public function startTurn():void {
 			
 		}
-		public function updateTurn():Boolean {
-			return false;
+		
+		public function updateTurn():void {
 		}
+		
 		public function endTurn():void {
 			
 		}
