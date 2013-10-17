@@ -26,6 +26,8 @@
 
 		public static const X_SIZE:Number = 50.0;
 		public static const Y_SIZE:Number = 50.0;		
+		public static const X_SNAP:Number = 0.1;
+		public static const Y_SNAP:Number = 0.1;
 		protected static var tile_index:int = 0;
 		protected static var tiles:Array = new Array();
 
@@ -58,23 +60,37 @@
 			text = new TextField();
 			text.text = this.id.toString();
 			
-			//Find Neighboring Tiles
-			var n_x:Number;
-			var n_y:Number;
-			var objectsAt:Array;
-			//trace("Begin neighbor search, tile:" + id);
-			//trace("Position:" + point);
-			for(var d:int = 0; d < 4; d++){
-				n_x = x + (X_SIZE * COORDS[d][0]);
-				n_y = y + (Y_SIZE * COORDS[d][1]);
-				//trace ( COORDICONS[d] + ":" + new Point(n_x, n_y));
-				for (var t in tiles){
-					var tile:tile_default = tiles[t];
-					if (tile != null && tile != this){
-						if (tile.x == n_x && tile.y == n_y){
-							this.neighbors[d] = tile;
-							tile.neighbors[OPPOSITES[d]] = this;
-							//trace(id + ">" + COORDICONS[d] + ">" + t);
+			//Find neighboring tiles
+			for (var t in tiles){
+				var tile:tile_default = tiles[t];
+				if (tile.id != this.id){
+					var x_dist:Number = tile.x - this.x;
+					var y_dist:Number = tile.y - this.y;
+					
+					//Horizontal
+					if (Math.abs(y_dist) < Y_SNAP){
+						if (Math.abs(x_dist) <= X_SIZE + X_SNAP){
+							if (x_dist > 0){
+								this.neighbors[RIGHT] = tile;
+								tile.neighbors[LEFT] = this;
+								trace(this.id + ">" + COORDICONS[RIGHT] + ">" + tile.id);
+							} else {
+								this.neighbors[LEFT] = tile;
+								tile.neighbors[RIGHT] = this;
+								trace(this.id + ">" + COORDICONS[LEFT] + ">" + tile.id);
+							}
+						}
+					} else if (Math.abs(x_dist) < X_SNAP){
+						if (Math.abs(y_dist) <= Y_SIZE + Y_SNAP){
+							if (y_dist > 0){
+								this.neighbors[DOWN] = tile;
+								tile.neighbors[UP] = this;
+								trace(this.id + ">" + COORDICONS[DOWN] + ">" + tile.id);
+							} else {
+								this.neighbors[UP] = tile;
+								tile.neighbors[DOWN] = this;
+								trace(this.id + ">" + COORDICONS[UP] + ">" + tile.id);
+							}
 						}
 					}
 				}
@@ -84,11 +100,11 @@
 			text.selectable = false;
 			parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-			this.stage.addEventListener( MouseEvent.MOUSE_OVER, _onMouseOver );
-			this.stage.addEventListener( MouseEvent.MOUSE_OUT, _onMouseOut );
+			this.addEventListener( MouseEvent.MOUSE_OVER, _highlight );
+			this.addEventListener( MouseEvent.MOUSE_OUT, _unhighlight );
 		}
 		
-		private function _onMouseOver( e:MouseEvent): void
+		private function _highlight( e:MouseEvent): void
 		{
 			trace(e.target);
 			var myColorTransform = new ColorTransform();
@@ -96,13 +112,20 @@
 			this.transform.colorTransform = myColorTransform;
 		}
 		
-		private function _onMouseOut( e:MouseEvent): void
+		private function _unhighlight( e:MouseEvent): void
 		{
 			trace(e.target);
 			this.transform.colorTransform = new ColorTransform();
 		}
+		
 		private function _onUpdate( e:Event ):void
 		{
+			text.text = this.id.toString();
+			for (var d:int = 0; d < 4; d++){
+				if (this.neighbors[d] != null){
+					text.appendText(COORDICONS[d]);
+				}
+			}
 		}
 	}
 }
