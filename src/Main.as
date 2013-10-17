@@ -4,10 +4,9 @@ package
    import flash.events.Event;
    import flash.text.TextField;
    import flash.text.TextFormat;
-
+   [SWF(width='800',height='600',backgroundColor='#111133',frameRate='30')]
    public class Main extends Sprite
    {
-	
       public function Main():void
       {
          if (stage) init();
