@@ -32,12 +32,20 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
+<<<<<<< HEAD
       <path-element>C:\Users\Godzilla2500\Desktop\CMPS179-ByGloveAndDagger\src</path-element>
+=======
+      <path-element>C:\Users\admin\Dropbox\workspace\CMPS179-ByGloveAndDagger\src</path-element>
+>>>>>>> 6420679b3f7a9b016778f29e7738833a8e617add
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
+<<<<<<< HEAD
     <path-element>C:\Users\Godzilla2500\Desktop\CMPS179-ByGloveAndDagger\src\Main.as</path-element>
+=======
+    <path-element>C:\Users\admin\Dropbox\workspace\CMPS179-ByGloveAndDagger\src\Main.as</path-element>
+>>>>>>> 6420679b3f7a9b016778f29e7738833a8e617add
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

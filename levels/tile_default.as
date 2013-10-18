@@ -37,7 +37,7 @@
 		protected var id:int;
 		
 		protected var text:TextField;
-		
+				
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
@@ -53,9 +53,19 @@
 		
 		private function initialize(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
+			var x_dist:Number;
+			var y_dist:Number;
 			//Find tile elements and store them here.
-			var point:Point = new Point(x, y);			
-
+			for (var ei in tile_element.getInstances()){
+				var el:tile_element = tile_element.getInstances()[ei];
+				x_dist = el.x - this.x;
+				y_dist = el.y - this.y;
+				if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+					elements.add(el);
+					trace("Adding tile element:"+ el.name + " to tile:" + id); 
+				}
+			}
+		
 			//Generate debug text on each tile
 			text = new TextField();
 			text.text = this.id.toString();
@@ -64,8 +74,8 @@
 			for (var t in tiles){
 				var tile:tile_default = tiles[t];
 				if (tile.id != this.id){
-					var x_dist:Number = tile.x - this.x;
-					var y_dist:Number = tile.y - this.y;
+					x_dist = tile.x - this.x;
+					y_dist = tile.y - this.y;
 					
 					//Horizontal
 					if (Math.abs(y_dist) < Y_SNAP){
@@ -73,11 +83,11 @@
 							if (x_dist > 0){
 								this.neighbors[RIGHT] = tile;
 								tile.neighbors[LEFT] = this;
-								trace(this.id + ">" + COORDICONS[RIGHT] + ">" + tile.id);
+								//trace(this.id + ">" + COORDICONS[RIGHT] + ">" + tile.id);
 							} else {
 								this.neighbors[LEFT] = tile;
 								tile.neighbors[RIGHT] = this;
-								trace(this.id + ">" + COORDICONS[LEFT] + ">" + tile.id);
+								//trace(this.id + ">" + COORDICONS[LEFT] + ">" + tile.id);
 							}
 						}
 					} else if (Math.abs(x_dist) < X_SNAP){
@@ -85,11 +95,11 @@
 							if (y_dist > 0){
 								this.neighbors[DOWN] = tile;
 								tile.neighbors[UP] = this;
-								trace(this.id + ">" + COORDICONS[DOWN] + ">" + tile.id);
+								//trace(this.id + ">" + COORDICONS[DOWN] + ">" + tile.id);
 							} else {
 								this.neighbors[UP] = tile;
 								tile.neighbors[DOWN] = this;
-								trace(this.id + ">" + COORDICONS[UP] + ">" + tile.id);
+								//trace(this.id + ">" + COORDICONS[UP] + ">" + tile.id);
 							}
 						}
 					}
@@ -98,7 +108,7 @@
 			text.x = x;
 			text.y = y;
 			text.selectable = false;
-			parent.addChild(text);
+			//parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
 			this.addEventListener( MouseEvent.MOUSE_OVER, _highlight );
 			this.addEventListener( MouseEvent.MOUSE_OUT, _unhighlight );
@@ -106,7 +116,6 @@
 		
 		private function _highlight( e:MouseEvent): void
 		{
-			trace(e.target);
 			var myColorTransform = new ColorTransform();
 			myColorTransform.color = 0x1133FF;
 			this.transform.colorTransform = myColorTransform;
@@ -114,7 +123,6 @@
 		
 		private function _unhighlight( e:MouseEvent): void
 		{
-			trace(e.target);
 			this.transform.colorTransform = new ColorTransform();
 		}
 		
