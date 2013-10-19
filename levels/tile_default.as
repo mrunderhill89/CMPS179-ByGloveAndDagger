@@ -58,11 +58,13 @@
 			//Find tile elements and store them here.
 			for (var ei in tile_element.getInstances()){
 				var el:tile_element = tile_element.getInstances()[ei];
-				x_dist = el.x - this.x;
-				y_dist = el.y - this.y;
-				if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
-					elements.add(el);
-					trace("Adding tile element:"+ el.name + " to tile:" + id); 
+				if (el != null){
+					x_dist = el.x - this.x;
+					y_dist = el.y - this.y;
+					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+						elements.add(el);
+						trace("Adding tile element:"+ el.name + " to tile:" + id); 
+					}
 				}
 			}
 		
@@ -110,23 +112,23 @@
 			text.selectable = false;
 			//parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-			this.addEventListener( MouseEvent.MOUSE_OVER, _highlight );
-			this.addEventListener( MouseEvent.MOUSE_OUT, _unhighlight );
+			this.addEventListener( MouseEvent.MOUSE_OVER, _mouseDown );
+			this.addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
 		}
 		
-		private function _highlight( e:MouseEvent): void
+		private function _mouseDown( e:MouseEvent): void
 		{
 			var myColorTransform = new ColorTransform();
 			myColorTransform.color = 0x1133FF;
 			this.transform.colorTransform = myColorTransform;
 		}
 		
-		private function _unhighlight( e:MouseEvent): void
+		public function _mouseOut( e:MouseEvent): void
 		{
 			this.transform.colorTransform = new ColorTransform();
 		}
 		
-		private function _onUpdate( e:Event ):void
+		public function _onUpdate( e:Event ):void
 		{
 			text.text = this.id.toString();
 			for (var d:int = 0; d < 4; d++){
