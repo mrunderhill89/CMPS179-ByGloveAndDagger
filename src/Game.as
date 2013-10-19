@@ -5,6 +5,8 @@ package
 	 * ...
 	 * @author Kevin
 	 */
+	import Factions.Faction;
+	import Factions.Player;
 	import flash.automation.StageCaptureEvent;
 	import flash.display.Loader;
 	import flash.display.Sprite;
@@ -20,19 +22,19 @@ package
 	import flash.system.Security;
 	import flash.system.Capabilities;
 	import flash.geom.Rectangle;
+	import HFSM.HFSM;
 	
 	Security.allowDomain("*");
 	Security.allowInsecureDomain("*");
 
 	public class Game extends Sprite
    {
- 	protected var player:Faction;
-	protected var guards:Faction;
-	protected var current:Faction;
+ 	protected var states:HFSM;
 	protected var level:Loader;
 	protected var cameraVelocity:Point = new Point(0,0);
 	protected var debug:TextField;
 	public function Game() : void {
+		states = new HFSM();
 		if(stage) {
 			initialize();
 		} else {
@@ -42,7 +44,13 @@ package
 	
 	private function _onUpdate( e:Event ):void
 		{
-			current.updateTurn();
+			//Handle state machine
+			var stateActions:Array = states.getActions();
+			for (var ai:String in stateActions) {
+				var a:Function = stateActions[ai];
+				a.apply();
+			}
+			
 			level.x += cameraVelocity.x;
 			level.y += cameraVelocity.y;
 			if (mouseX < stage.stageWidth / 10) {
@@ -65,11 +73,6 @@ package
 		// call this when a faction has completed their turn
 	private function _onEndTurn( e:Event):void 
 		{
-			if (current == player) {
-				current = guards;
-			} else {
-				current = player;
-			}
 		}
 	
     private function initialize(e:Event = null):void {
@@ -89,13 +92,12 @@ package
 		level.load(url, loaderContext);
 		
 		//Set up factions.
-		player = new Faction();
-		guards = new Faction();
-		current = player;
+		states =  new HFSM();
+		var player:Player = new Player(states);
+		var guards:Faction = new Faction("Enemy", states);
 
 		var continueGame:Boolean = true;
 		this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-		current.startTurn();
     }
    }
 }

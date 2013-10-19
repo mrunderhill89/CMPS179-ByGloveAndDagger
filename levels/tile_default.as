@@ -42,6 +42,7 @@
 			id = tile_index;
 			tile_index++;
 			neighbors = new Array();
+			elements = new Array();
 			if (this is tile_default)
 				tiles.push(this);
 			if (stage) {
@@ -62,7 +63,7 @@
 					x_dist = el.x - this.x;
 					y_dist = el.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
-						elements.add(el);
+						elements.push(el);
 						trace("Adding tile element:"+ el.name + " to tile:" + id); 
 					}
 				}
@@ -116,7 +117,7 @@
 			this.addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
 		}
 		
-		private function _mouseDown( e:MouseEvent): void
+		public function _mouseDown( e:MouseEvent): void
 		{
 			var myColorTransform = new ColorTransform();
 			myColorTransform.color = 0x1133FF;

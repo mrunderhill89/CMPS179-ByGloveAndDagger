@@ -25,7 +25,7 @@
 		
 		public function _mouseDown( e:MouseEvent ) {
 			if (tile != null) {
-				tile._mouseDown();
+				tile._mouseDown(e);
 			}
 		}
 	}

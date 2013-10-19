@@ -22,7 +22,7 @@ package HFSM
 			condition = c;
 			memory = m;
 			level = from.getLevel() - to.getLevel();
-			from.transitions.push(this);
+			from.addTransition(this);
 		}
 
 		public function getAction():Function {
@@ -33,10 +33,14 @@ package HFSM
 			this.condition = c;
 		}
 
-		public function isTriggered(thisArg:any = null, argArray:any = null):Boolean{
+		public function isTriggered(thisArg:Object = null, argArray:Array = null):Boolean{
 			if (condition == null)
 				return false;
 			return condition.apply(thisArg, argArray);
+		}
+		
+		public function rememberState():Boolean {
+			return memory;
 		}
 		
 		public function getLevel():int{

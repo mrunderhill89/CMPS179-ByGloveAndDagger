@@ -6,40 +6,34 @@ package HFSM
 	 */
 	public class Result 
 	{
+		public var actions:Array;
+		public var trans:Transition;
+		public var level:int;		
+		public function Result(){
+			actions = new Array();
+			initialize();
+		}
 		
-		public function Result() 
-		{
-			public var actions:Array;
-			public var trans:Transition;
-			public var level:int;
-			
-			public function Result(){
-				actions = new Array();
-				initialize();
-			}
-			
-			public function initialize():void{
-				actions.clear();
-				trans = null;
-			}
-			
-			public function getActions():Array {
-				return actions;
-			}
+		public function initialize():void{
+			actions.splice(0);
+			trans = null;
+		}
+		
+		public function getActions():Array {
+			return actions;
+		}
 
-			public function addAction(a:Function):void{
-				if (a != null){
-					actions.add(a);
-				}
-			}
-			
-			public function addActions(as:Array):void{
-				for (IAction a: as){
-					addAction(a);
-				}
+		public function addAction(a:Function):void{
+			if (a != null){
+				actions.push(a);
 			}
 		}
 		
+		public function addActions(newActions:Array):void{
+			for (var a:String in newActions){
+				addAction(newActions[a]);
+			}
+		}		
 	}
 
 }
