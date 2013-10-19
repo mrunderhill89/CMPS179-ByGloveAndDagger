@@ -3,10 +3,10 @@
 	import flash.display.SimpleButton;
 	
 	
-	public class unit_guard extends unit {
+	public class torch extends tile_element {
 		
 		
-		public function unit_guard() {
+		public function torch() {
 			// constructor code
 		}
 	}

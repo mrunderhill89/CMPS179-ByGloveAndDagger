@@ -57,24 +57,38 @@
 			var x_dist:Number;
 			var y_dist:Number;
 			//Find tile elements and store them here.
-			for (var ei in tile_element.getInstances()){
+			for (var ei:String in tile_element.getInstances()){
 				var el:tile_element = tile_element.getInstances()[ei];
 				if (el != null){
 					x_dist = el.x - this.x;
 					y_dist = el.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+						el.setTile(this);
 						elements.push(el);
-						trace("Adding tile element:"+ el.name + " to tile:" + id); 
+						//trace("Adding tile element:"+ el.name + " to tile:" + id); 
 					}
 				}
 			}
-		
+
+			//Find units and set their tile to this.
+			for (var ui:String in unit.getInstances()){
+				var u:unit = unit.getInstances()[ui];
+				if (u != null){
+					x_dist = u.x - this.x;
+					y_dist = u.y - this.y;
+					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+						u.setTile(this);
+						//trace("Adding unit:"+ u.name + " to tile:" + id); 
+					}
+				}
+			}
+
 			//Generate debug text on each tile
 			text = new TextField();
 			text.text = this.id.toString();
 			
 			//Find neighboring tiles
-			for (var t in tiles){
+			for (var t:String in tiles){
 				var tile:tile_default = tiles[t];
 				if (tile.id != this.id){
 					x_dist = tile.x - this.x;
@@ -119,7 +133,7 @@
 		
 		public function _mouseDown( e:MouseEvent): void
 		{
-			var myColorTransform = new ColorTransform();
+			var myColorTransform:ColorTransform = new ColorTransform();
 			myColorTransform.color = 0x1133FF;
 			this.transform.colorTransform = myColorTransform;
 		}

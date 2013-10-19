@@ -1,4 +1,4 @@
-﻿package  {
+﻿package {
 	
 	import flash.display.SimpleButton;
 	
@@ -8,7 +8,6 @@
 		
 		public function unit_thief() {
 			super();
-			
 		}
 	}
 	

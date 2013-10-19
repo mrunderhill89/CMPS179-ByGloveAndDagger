@@ -176,5 +176,5 @@ package HFSM
 			return false;
 		return parent.isActive();
 	}
-		
+	}	
 }

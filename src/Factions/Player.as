@@ -1,19 +1,22 @@
 package Factions 
 {
 	import HFSM.HFSM;
+	import HFSM.Transition;
 	/**
 	 * ...
-	 * @author ...
+	 * @author Kevin
 	 */
 	public class Player extends Faction 
 	{
-		
+		protected var currentUnit:unit;
 		public function Player(p:HFSM, makeInitial:Boolean = false) 
 		{
 			super("Player", p, makeInitial);
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
 			select.setExitAction(selectExit);
+			
+			var unitSelected:Transition = new Transition(select, move, function() : Boolean { return currentUnit != null;} ); 
 			
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);
@@ -27,10 +30,10 @@ package Factions
 		
 		public function selectEntry():void {
 			trace("Select Unit");
+			currentUnit = null;
 		}
 		
 		public function selectUpdate():void {
-			
 		}
 
 		public function selectExit():void {

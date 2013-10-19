@@ -1,12 +1,11 @@
-﻿package  {
+﻿package {
 	import flash.display.SimpleButton;
 	import flash.events.MouseEvent;
-	
-	public class tile_element extends SimpleButton {
+	public class unit extends SimpleButton{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
 		
-		public function tile_element(){
+		public function unit(){
 			instances.push(this);
 			tile = null;
 		}
@@ -23,7 +22,7 @@
 			tile = t;
 		}
 		
-		public function _mouseDown( e:MouseEvent ) {
+		public function _mouseDown( e:MouseEvent ):void {
 			if (tile != null) {
 				tile._mouseDown(e);
 			}
