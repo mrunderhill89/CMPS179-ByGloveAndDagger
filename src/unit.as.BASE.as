@@ -1,16 +1,13 @@
-﻿package  {
+﻿package {
 	import flash.display.SimpleButton;
 	import flash.events.MouseEvent;
-	
-	public class tile_element extends SimpleButton {
+	public class unit extends SimpleButton{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
 		
-		public function tile_element(){
+		public function unit(){
 			instances.push(this);
 			tile = null;
-			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
-			addEventListener(MouseEvent.CLICK, _mouseOver);
 		}
 		
 		public static function getInstances():Array{
@@ -25,17 +22,11 @@
 			tile = t;
 		}
 		
-		public function _mouseOver( me:MouseEvent):void {
+		public function _mouseDown( e:MouseEvent ):void {
 			if (tile != null) {
-				tile._mouseOver(me);
+				tile._mouseDown(e);
 			}
 		}
-		public function _mouseClick( me:MouseEvent):void {
-			if (tile != null) {
-				tile._mouseClick(me);
-			}
-		}
-		
 	}
 	
 }

@@ -37,7 +37,12 @@
 		protected var id:int;
 		
 		protected var text:TextField;
-				
+		
+		protected static var currentTile:tile_default = null;
+		public static function getCurrentTile():tile_default {
+			return currentTile;
+		}
+		public static var highlighting:Boolean = true;
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
@@ -127,20 +132,38 @@
 			text.selectable = false;
 			//parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-			this.addEventListener( MouseEvent.MOUSE_OVER, _mouseDown );
-			this.addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
+			addEventListener( MouseEvent.MOUSE_OVER, _mouseOver );
+			addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
+			addEventListener( MouseEvent.CLICK, _mouseClick);
 		}
 		
-		public function _mouseDown( e:MouseEvent): void
+		public function _mouseOver( e:MouseEvent): void
 		{
-			var myColorTransform:ColorTransform = new ColorTransform();
-			myColorTransform.color = 0x1133FF;
-			this.transform.colorTransform = myColorTransform;
+			//trace("Tile Selected:" + id);
+			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOVER, false, false, this));
+			currentTile = this;
 		}
 		
 		public function _mouseOut( e:MouseEvent): void
 		{
+			//trace("Tile Deselected:" + id);
+			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOUT, false, false, this));
+		}
+
+		public function _mouseClick ( e:MouseEvent): void
+		{
+			trace("Tile Clicked:" + id);
+			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, false, false, this));
+		}
+				
+		public function dehighlight(): void {
 			this.transform.colorTransform = new ColorTransform();
+		}
+
+		public function highlight(): void {
+			var myColorTransform:ColorTransform = new ColorTransform();
+			myColorTransform.color = 0x1133FF;
+			this.transform.colorTransform = myColorTransform;			
 		}
 		
 		public function _onUpdate( e:Event ):void
@@ -150,6 +173,11 @@
 				if (this.neighbors[d] != null){
 					text.appendText(COORDICONS[d]);
 				}
+			}
+			if (currentTile == this && highlighting) {
+				highlight();
+			} else {
+				dehighlight();
 			}
 		}
 	}

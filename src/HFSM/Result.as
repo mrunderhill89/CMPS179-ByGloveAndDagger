@@ -7,7 +7,7 @@ package HFSM
 	public class Result 
 	{
 		public var actions:Array;
-		public var trans:Transition;
+		public var trans:iTransition;
 		public var level:int;		
 		public function Result(){
 			actions = new Array();
