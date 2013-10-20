@@ -5,14 +5,18 @@
 	public class unit extends SimpleButton{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
-<<<<<<< HEAD
+		protected var moved:Boolean;
 		public var facingA:Array = new Array();
 		public var facing:int = 0;
 		public function unit(){
 			instances.push(this);
 			tile = null;
+			moved = false;
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
+			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
+			addEventListener(MouseEvent.CLICK, _mouseOver);
 		}
+		
 		private function _onUpdate():void
 		{
 			
@@ -20,15 +24,6 @@
 				this.facingA[0];
 				
 			}
-=======
-		protected var moved:Boolean;
-		public function unit(){
-			instances.push(this);
-			tile = null;
-			moved = false;
-			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
-			addEventListener(MouseEvent.CLICK, _mouseOver);
->>>>>>> 766878200ae8f9662101ea3bfa747bf5ee95ada3
 		}
 		
 		public static function getInstances():Array{
@@ -54,12 +49,9 @@
 			}
 		}
 		
-<<<<<<< HEAD
-=======
 		public function hasMoved():Boolean {
 			return moved;
 		}
->>>>>>> 766878200ae8f9662101ea3bfa747bf5ee95ada3
 	}
 	
 }
