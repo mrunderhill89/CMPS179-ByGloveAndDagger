@@ -27,5 +27,15 @@ package Factions
 		public function startTurn():void {
 			trace(name + " Phase");
 		}
+		
+		public function noAvailableUnits():Boolean {
+			for (var u:String in units) {
+				var un:unit = units[u];
+				if (!un.hasMoved()) {
+					return false;
+				}
+			}
+			return true;
+		}
 	}	
 }

@@ -22,6 +22,7 @@ package
 	import flash.system.Security;
 	import flash.system.Capabilities;
 	import flash.geom.Rectangle;
+	import HFSM.EventTransition;
 	import HFSM.HFSM;
 	
 	Security.allowDomain("*");
@@ -56,14 +57,13 @@ package
 	private function _onUpdate( e:Event ):void
 		{
 			//Handle state machine
-			var stateActions:Array = states.getActions();
+			var stateActions:Array = states.update().getActions();
 			for (var ai:String in stateActions) {
 				var a:Function = stateActions[ai];
 				a.apply();
 			}			
 		}
 		
-		// call this when a faction has completed their turn
 	private function _onEndTurn( e:Event):void 
 		{
 		}
@@ -88,9 +88,9 @@ package
 		states =  new HFSM();
 		var player:Player = new Player(states);
 		var guards:Faction = new Faction("Enemy", states);
-
+		
 		var continueGame:Boolean = true;
 		this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
     }
-   }
+   }	   
 }

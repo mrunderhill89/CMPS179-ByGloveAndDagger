@@ -4,10 +4,13 @@
 	public class unit extends SimpleButton{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
-		
+		protected var moved:Boolean;
 		public function unit(){
 			instances.push(this);
 			tile = null;
+			moved = false;
+			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
+			addEventListener(MouseEvent.CLICK, _mouseOver);
 		}
 		
 		public static function getInstances():Array{
@@ -22,10 +25,19 @@
 			tile = t;
 		}
 		
-		public function _mouseDown( e:MouseEvent ):void {
+		public function _mouseOver( me:MouseEvent):void {
 			if (tile != null) {
-				tile._mouseDown(e);
+				tile._mouseOver(me);
 			}
+		}
+		public function _mouseClick( me:MouseEvent):void {
+			if (tile != null) {
+				tile._mouseClick(me);
+			}
+		}
+		
+		public function hasMoved():Boolean {
+			return moved;
 		}
 	}
 	

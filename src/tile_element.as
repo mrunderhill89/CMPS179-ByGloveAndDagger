@@ -9,6 +9,8 @@
 		public function tile_element(){
 			instances.push(this);
 			tile = null;
+			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
+			addEventListener(MouseEvent.CLICK, _mouseOver);
 		}
 		
 		public static function getInstances():Array{
@@ -23,11 +25,17 @@
 			tile = t;
 		}
 		
-		public function _mouseDown( e:MouseEvent ):void {
+		public function _mouseOver( me:MouseEvent):void {
 			if (tile != null) {
-				tile._mouseDown(e);
+				tile._mouseOver(me);
 			}
 		}
+		public function _mouseClick( me:MouseEvent):void {
+			if (tile != null) {
+				tile._mouseClick(me);
+			}
+		}
+		
 	}
 	
 }

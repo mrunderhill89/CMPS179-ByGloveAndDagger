@@ -59,7 +59,7 @@ package HFSM
 	
 	//Returns a child state by name
 		public function getChild(name:String):HFSM{
-			return subStates.get(name);
+			return subStates[name];
 		}
 		
 	public function update(result:Result = null):Result {
@@ -79,9 +79,9 @@ package HFSM
 			}
 		} else {
 			//Try to find a transition in the current state.
-			var triggered:Transition = null;
+			var triggered:iTransition = null;
 			for (var t:String in current.transitions) {
-				var trans:Transition = current.transitions[t];
+				var trans:iTransition = current.transitions[t];
 				if (trans.isTriggered()){
 					triggered = trans;
 					break;
@@ -153,7 +153,7 @@ package HFSM
 		return level;
 	}
 	
-	public function addTransition(t:Transition):void {
+	public function addTransition(t:iTransition):void {
 		transitions.push(t);
 	}
 	
@@ -181,5 +181,6 @@ package HFSM
 		if (parent == null)
 			return this;
 		return parent.getRoot();
-	}	
+	}
+	}
 }
