@@ -5,6 +5,8 @@ package Factions
 	import HFSM.HFSM;
 	import HFSM.Transition;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import flash.display.Loader;
 	/**
 	 * ...
 	 * @author Kevin

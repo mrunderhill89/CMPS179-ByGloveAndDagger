@@ -29,7 +29,7 @@ package
 		 startLoader.removeEventListener(MouseEvent.CLICK, playGame);
 		 startLoader.visible = false;
 		 removeChild(startLoader);
-		 var game:Game = new Game();
+		 var game:Game = Game.getInstance();
 		 addChild(game);
 	  }
 	  private function startLoaded(e:Event):void

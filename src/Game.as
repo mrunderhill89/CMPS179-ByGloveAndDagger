@@ -34,6 +34,16 @@ package
 	protected var level:Loader;
 	protected var cameraVelocity:Point = new Point(0,0);
 	protected var debug:TextField;
+	
+	protected static var instance:Game = null;
+	public static function getInstance():Game {
+		if (instance == null)
+			instance = new Game();
+		return instance;
+	}
+	public function getLevel():Loader {
+		return level;
+	}
 	public function Game() : void {
 		states = new HFSM();
 		if(stage) {

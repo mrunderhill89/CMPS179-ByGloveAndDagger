@@ -14,7 +14,7 @@ package
 		public static const TILE_RIGHT_CLICKED:String = "tile_rclicked";
 
 		public var tile:tile_default;
-		public function TileEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false, t:tile_default =  null)
+		public function TileEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false, t:tile_default =  null)
 		{
 			super(type, bubbles, cancelable);
 			tile = t;
