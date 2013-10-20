@@ -16,7 +16,7 @@ package
       private function init(e:Event = null):void
       {
          removeEventListener(Event.ADDED_TO_STAGE, init);
-		 var game:Game = new Game();
+		 var game:Game = Game.getInstance();
 		 addChild(game);
 	  }
 	}

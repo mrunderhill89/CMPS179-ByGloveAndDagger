@@ -37,7 +37,7 @@
 		protected var id:int;
 		
 		protected var text:TextField;
-				
+
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
@@ -127,20 +127,30 @@
 			text.selectable = false;
 			//parent.addChild(text);
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-			this.addEventListener( MouseEvent.MOUSE_OVER, _mouseDown );
-			this.addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
+			addEventListener( MouseEvent.MOUSE_OVER, _mouseDown );
+			addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
 		}
 		
 		public function _mouseDown( e:MouseEvent): void
 		{
-			var myColorTransform:ColorTransform = new ColorTransform();
-			myColorTransform.color = 0x1133FF;
-			this.transform.colorTransform = myColorTransform;
+			tile_event.TILE_ON.tile = this;
+			dispatchEvent(tile_event.TILE_ON);
 		}
 		
 		public function _mouseOut( e:MouseEvent): void
 		{
+			tile_event.TILE_OFF.tile = this;
+			dispatchEvent(tile_event.TILE_OFF);
+		}
+				
+		public function highlight(): void {
 			this.transform.colorTransform = new ColorTransform();
+		}
+
+		public function dehighlight(): void {
+			var myColorTransform:ColorTransform = new ColorTransform();
+			myColorTransform.color = 0x1133FF;
+			this.transform.colorTransform = myColorTransform;			
 		}
 		
 		public function _onUpdate( e:Event ):void

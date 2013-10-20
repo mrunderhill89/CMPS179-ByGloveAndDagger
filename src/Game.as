@@ -31,8 +31,15 @@ package
    {
  	protected var states:HFSM;
 	protected var level:Loader;
-	protected var cameraVelocity:Point = new Point(0,0);
 	protected var debug:TextField;
+	protected static var instance:Game = null;
+	
+	public static function getInstance():Game {
+		if (instance == null)
+			instance = new Game();
+		return instance;
+	}
+	
 	public function Game() : void {
 		states = new HFSM();
 		if(stage) {
@@ -42,6 +49,10 @@ package
 		}
 	} 
 	
+	public function getLevel():Loader {
+		return level;
+	}
+	
 	private function _onUpdate( e:Event ):void
 		{
 			//Handle state machine
@@ -49,25 +60,7 @@ package
 			for (var ai:String in stateActions) {
 				var a:Function = stateActions[ai];
 				a.apply();
-			}
-			
-			level.x += cameraVelocity.x;
-			level.y += cameraVelocity.y;
-			if (mouseX < stage.stageWidth / 10) {
-				cameraVelocity.x = +10;
-			} else if (mouseX > (stage.stageWidth * 9) / 10) {
-				cameraVelocity.x = -10;
-			} else {
-				cameraVelocity.x = 0;
-			}
-			if (mouseY < stage.stageHeight / 10) {
-				cameraVelocity.y = +10;
-			} else if (mouseY > (stage.stageHeight * 9) / 10) {
-				cameraVelocity.y = -10;
-			} else {
-				cameraVelocity.y = -0;
-			}
-			debug.text = "(" + mouseX + "," + mouseY + ")" + "[" + stage.stageWidth + "," + stage.stageHeight + "]";
+			}			
 		}
 		
 		// call this when a faction has completed their turn
