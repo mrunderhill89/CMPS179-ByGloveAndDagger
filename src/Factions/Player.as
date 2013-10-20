@@ -1,11 +1,9 @@
 package Factions 
 {
-	import flash.display.Loader;
 	import flash.geom.Rectangle;
 	import HFSM.EventTransition;
 	import HFSM.HFSM;
 	import HFSM.Transition;
-	import flash.geom.Point;
 	import flash.events.MouseEvent;
 	/**
 	 * ...
@@ -35,7 +33,8 @@ package Factions
 
 			unitAction.setEntryAction(unitEntry);
 			unitAction.setUpdateAction(unitUpdate);
-			unitAction.setExitAction(unitExit);			
+			unitAction.setExitAction(unitExit);
+			
 		}
 		
 		public function selectEntry():void {
@@ -43,7 +42,6 @@ package Factions
 		}
 		
 		public function selectUpdate():void {
-			scrollCamera();
 		}
 
 		public function selectExit():void {
