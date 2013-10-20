@@ -176,10 +176,5 @@ package HFSM
 			return false;
 		return parent.isActive();
 	}
-	
-	public function getRoot():HFSM {
-		if (parent == null)
-			return this;
-		return parent.getRoot();
 	}	
 }
