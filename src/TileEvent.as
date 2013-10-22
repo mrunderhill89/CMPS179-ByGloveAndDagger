@@ -1,4 +1,4 @@
-package
+﻿package
     {
     import flash.events.Event;
      
@@ -12,7 +12,8 @@ package
 		public static const TILE_MOUSEOUT:String = "tile_mouseout";
 		public static const TILE_CLICKED:String = "tile_clicked";
 		public static const TILE_RIGHT_CLICKED:String = "tile_rclicked";
-
+		public static const TILE_ADDED:String = "tile_added";
+		
 		public var tile:tile_default;
 		public function TileEvent(type:String, bubbles:Boolean = true, cancelable:Boolean = false, t:tile_default =  null)
 		{

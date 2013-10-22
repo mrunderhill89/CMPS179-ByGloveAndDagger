@@ -1,20 +1,26 @@
 ﻿package {
-	import flash.display.SimpleButton;
+	import Factions.Faction;
+	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
-	public class unit extends SimpleButton{
+	public class unit extends MovieClip{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
 		protected var moved:Boolean;
 		public var facingA:Array = new Array();
 		public var facing:int = 0;
-		public function unit(){
+		public var factionName:String = "";
+
+		public function unit(f:String = ""){
 			instances.push(this);
 			tile = null;
 			moved = false;
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
 			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
-			addEventListener(MouseEvent.CLICK, _mouseOver);
+			addEventListener(MouseEvent.CLICK, _mouseClick);
+			addEventListener(UnitEvent.UNIT_CLICKED, _indirectClick);
+			factionName = f;
+			trace("Designating " + name + " under faction " + factionName);
 		}
 		
 		private function _onUpdate():void
@@ -47,6 +53,10 @@
 			if (tile != null) {
 				tile._mouseClick(me);
 			}
+		}
+		
+		public function _indirectClick(ue:UnitEvent):void {
+			trace("Unit Clicked:" + name);
 		}
 		
 		public function hasMoved():Boolean {

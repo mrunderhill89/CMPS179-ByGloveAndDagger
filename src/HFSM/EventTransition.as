@@ -41,13 +41,15 @@ package HFSM
 		}
 
 		public function isTriggered(thisArg:Object = null, argArray:Array = null):Boolean {
-			var tempTrigger:Boolean = (triggered && target != null && host.isActive());
-			triggered = false;
+			var tempTrigger:Boolean = triggered;
+			triggered = false; //Prevent trigger from repeating
 			return tempTrigger;
 		}
 		
 		public function trigger( e:Event ):void {
-			triggered = true;
+			if (target != null && host.isActive()){
+				triggered = true;
+			}
 		}
 			
 		public function rememberState():Boolean {

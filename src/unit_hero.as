@@ -3,11 +3,12 @@
 	import flash.display.SimpleButton;
 	
 	
-	public class unit_hero extends SimpleButton {
+	public class unit_hero extends unit_thief {
 		
 		
 		public function unit_hero() {
-			// constructor code
+			super();
+			factionName = "thief";
 		}
 	}
 	

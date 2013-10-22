@@ -1,5 +1,6 @@
 package Factions 
 {
+	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import HFSM.EventTransition;
 	import HFSM.HFSM;
@@ -7,6 +8,7 @@ package Factions
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.display.Loader;
+	import tile_default;
 	/**
 	 * ...
 	 * @author Kevin
@@ -22,13 +24,13 @@ package Factions
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
 			select.setExitAction(selectExit);
-			
-			var unitSelected:EventTransition = new EventTransition(select, move, TileEvent.TILE_CLICKED
+			/*
+			var unitSelected:EventTransition = new EventTransition(select, move, UnitEvent.UNIT_CLICKED
 															, function(): void { trace("Unit Selected"); } ); 
 			var allUnitsExhausted:Transition = new Transition(select, parent.getChild("Enemy"), noAvailableUnits
 															, function():void {trace("All Units Exhausted");} );
-			//var endTurnManually:EventTransition = new EventTransition(select, parent.getChild("Enemy"), Game.END_TURN);
-			
+			var endTurnManually:EventTransition = new EventTransition(select, parent.getChild("Enemy"), Game.END_TURN);
+			*/
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);
 			move.setExitAction(moveExit);
@@ -37,6 +39,21 @@ package Factions
 			unitAction.setUpdateAction(unitUpdate);
 			unitAction.setExitAction(unitExit);
 			
+			Game.getInstance().getLevel().addEventListener(Event.ADDED_TO_STAGE, loadUnits);
+		}
+		
+		public function loadUnits( e:Event):void {
+			trace ("Player loading units");
+			for (var u:String in unit.getInstances()) {
+				var un:unit = unit.getInstances()[u];
+				if (un.factionName == "thief") {
+					this.units.push(un);
+					trace("Adding thief unit:" + un.name);
+				}
+			}
+			if (units.length <= 0) {
+				trace("Warning, no Player units found");
+			}
 		}
 		
 		public function selectEntry():void {
@@ -48,7 +65,7 @@ package Factions
 
 		public function selectExit():void {
 		}
-				
+		
 		public function scrollCamera():void {
 			var game:Game = Game.getInstance();
 			var gameLevel:Loader = game.getLevel();

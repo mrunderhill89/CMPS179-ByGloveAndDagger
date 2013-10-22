@@ -33,6 +33,7 @@
 
 		protected var neighbors:Array;
 		protected var elements:Array;
+		protected var un:unit = null;
 		
 		protected var id:int;
 		
@@ -76,14 +77,16 @@
 			}
 
 			//Find units and set their tile to this.
+			//trace("Adding units...");
 			for (var ui:String in unit.getInstances()){
 				var u:unit = unit.getInstances()[ui];
 				if (u != null){
+					trace("Adding unit:"+ u.name + " to tile:" + id); 
 					x_dist = u.x - this.x;
 					y_dist = u.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
 						u.setTile(this);
-						//trace("Adding unit:"+ u.name + " to tile:" + id); 
+						this.un = u;
 					}
 				}
 			}
@@ -140,20 +143,23 @@
 		public function _mouseOver( e:MouseEvent): void
 		{
 			//trace("Tile Selected:" + id);
-			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOVER, false, false, this));
+			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOVER, true, false, this));
 			currentTile = this;
 		}
 		
 		public function _mouseOut( e:MouseEvent): void
 		{
 			//trace("Tile Deselected:" + id);
-			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOUT, false, false, this));
+			dispatchEvent(new TileEvent(TileEvent.TILE_MOUSEOUT, true, false, this));
 		}
 
 		public function _mouseClick ( e:MouseEvent): void
 		{
-			trace("Tile Clicked:" + id);
-			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, false, false, this));
+			trace("Tile Clicked:" + text.text);
+			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
+			if (this.un != null) {
+				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
+			}
 		}
 				
 		public function dehighlight(): void {

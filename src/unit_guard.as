@@ -7,7 +7,7 @@
 		
 		
 		public function unit_guard() {
-			// constructor code
+			super("guard");
 		}
 	}
 	

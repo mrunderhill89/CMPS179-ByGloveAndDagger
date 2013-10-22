@@ -7,7 +7,8 @@
 		
 		
 		public function unit_thief() {
-			super();
+			super("thief");
+			factionName = "thief";
 		}
 	}
 	
