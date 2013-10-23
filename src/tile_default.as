@@ -45,6 +45,8 @@
 		//For distance calculations. If dist <= this, we can't get there.
 		protected var dist:int = Infinity;
 		protected var previous:tile_default = null;
+		public var selecting:Boolean = false;
+		public var currUnit:unit;
 		
 		protected var id:int;
 		
@@ -56,7 +58,7 @@
 		public static function getCurrentTile():tile_default {
 			return currentTile;
 		}
-		
+		public static var highlighting:Boolean = true;
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
@@ -92,14 +94,16 @@
 			for (var ui:String in unit.getInstances()){
 				var u:unit = unit.getInstances()[ui];
 				if (u != null){
+					trace("Adding unit:"+ u.name + " to tile:" + id); 
 					x_dist = u.x - this.x;
 					y_dist = u.y - this.y;
-					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
-						setUnit(u);
+					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+						setUnit(u);						
 						u.setTile(this);
 					}
 				}
 			}
+
 			//Generate debug text on each tile
 			text = new TextField();
 			text.text = this.id.toString();
@@ -166,8 +170,20 @@
 		{
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
-			if (this.un != null) {
+			if (this.un != null && !selecting) {
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
+				setUnit(this.un);
+				selecting = true;
+				this.un = null;
+			}
+			if (selecting) {
+				var u:unit = this.getUnit();
+				//if it is within the bounds
+				this.un = u;
+				u.setTile(this)
+				u.x = this.x;
+				u.y = this.y;
+				selecting = false;
 			}
 		}
 				
@@ -204,7 +220,16 @@
 				dehighlight();
 			}
 		}
-		
+		public function setUnit(u:unit):void
+		{
+			currUnit = u;
+			un = u;
+		}
+		public function getUnit():unit
+		{
+			return currUnit;
+		}
+
 		/* Use Dijkstra's algorithm to build the shortest path
 		/* From "from" to "to". Returns the distance between them,
 		 * or INFINITE_DISTANCE if there's no available path between them.
