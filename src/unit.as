@@ -10,6 +10,7 @@
 		public var facingA:Array = new Array();
 		public var facing:int = 0;
 		public var factionName:String = "";
+		public var selecting:Boolean = false;
 
 		public function unit(f:String = "") {
 			stop();
@@ -38,8 +39,9 @@
 					x_dist = t.x - this.x;
 					y_dist = t.y - this.y;
 					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
-						t.setUnit(this);
 						setTile(t);
+						t.un = this;
+						trace("adding" + this.name + "to");
 					}
 				}
 			}
@@ -77,7 +79,17 @@
 		}
 		
 		public function _indirectClick(ue:UnitEvent):void {
-			trace("Unit Clicked:" + name);
+			//trace("Unit Clicked:" + name);
+			if (!selecting) {
+				selecting = true;
+				var t:tile_default = this.getTile();
+				t.un = null;
+				this.tile = null;				
+			}
+		}
+		public function setNewTile():void
+		{
+			
 		}
 		
 		public function hasMoved():Boolean {

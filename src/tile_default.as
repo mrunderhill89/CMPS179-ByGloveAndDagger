@@ -43,18 +43,19 @@
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
 		public var currUnit:unit = null;
+		public var un:unit = null;
+		public static var highlighting:Boolean = true;
 		
 		protected var id:int;
 		
 		protected var text:TextField;
 		
-		public static var highlighting:Boolean = true;
-		
+				
 		protected static var currentTile:tile_default = null;
 		public static function getCurrentTile():tile_default {
 			return currentTile;
 		}
-		public static var highlighting:Boolean = true;
+
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
@@ -87,6 +88,7 @@
 			}
 			
 			//Find units and attach to this tile if appropriate.
+			trace("adding units");
 			for (var ui:String in unit.getInstances()){
 				var u:unit = unit.getInstances()[ui];
 				if (u != null){
@@ -94,8 +96,8 @@
 					x_dist = u.x - this.x;
 					y_dist = u.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
-						setUnit(u);						
 						u.setTile(this);
+						this.un = u;
 					}
 				}
 			}
@@ -166,22 +168,25 @@
 		{
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
-			if (this.currUnit!= null && !selecting) {
+			if (this.un != null && !this.un.selecting) {
+				trace("selecting = true");
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
-				setUnit(this.un);
-				selecting = true;
-				this.currUnit= null;
-			}
-			if (selecting) {
-				var u:unit = this.getUnit();
-				//if it is within the bounds
-				this.currUnit= u;
-				u.setTile(this)
-				u.x = this.x;
-				u.y = this.y;
-				selecting = false;
+			}else {
+				for (var ui:String in unit.getInstances()){
+				var u:unit = unit.getInstances()[ui];
+					if (u != null) {
+						if (u.selecting) {
+							this.un = u;
+							u.setTile(this);
+							u.x = this.x;
+							u.y = this.y;
+							u.selecting = false;
+						}
+					}
+				}
 			}
 		}
+		
 				
 		public function dehighlight(): void {
 			this.transform.colorTransform = new ColorTransform();
@@ -201,7 +206,7 @@
 					text.appendText(COORDICONS[d]);
 				}
 			}
-			if (currUnit!= null) {
+			if (this.un!= null) {
 				text.appendText("<" + un.name + ">");
 			}
 			if (elements.length > 0) {
