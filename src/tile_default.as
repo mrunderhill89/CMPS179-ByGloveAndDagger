@@ -34,6 +34,8 @@
 		protected var neighbors:Array;
 		protected var elements:Array;
 		protected var un:unit = null;
+		public var selecting:Boolean = false;
+		public var currUnit:unit;
 		
 		protected var id:int;
 		
@@ -87,6 +89,7 @@
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
 						u.setTile(this);
 						this.un = u;
+						
 					}
 				}
 			}
@@ -157,8 +160,20 @@
 		{
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
-			if (this.un != null) {
+			if (this.un != null && !selecting) {
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
+				saveUnit(this.un);
+				selecting = true;
+				this.un = null;
+			}
+			if (selecting) {
+				var u:unit = this.getUnit();
+				//if it is within the bounds
+				this.un = u;
+				u.setTile(this)
+				u.x = this.x;
+				u.y = this.y;
+				selecting = false;
 			}
 		}
 				
@@ -185,6 +200,14 @@
 			} else {
 				dehighlight();
 			}
+		}
+		public function setUnit(u:unit):void
+		{
+			currUnit = u;
+		}
+		public function getUnit():unit
+		{
+			return currUnit;
 		}
 	}
 }
