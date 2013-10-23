@@ -32,6 +32,7 @@ package
    {
  	protected var states:HFSM;
 	protected var level:Loader;
+	protected var HUD:Loader;
 	protected var cameraVelocity:Point = new Point(0,0);
 	protected var debug:TextField;
 	
@@ -102,6 +103,14 @@ package
 		var url:URLRequest = new URLRequest("../levels/level1.swf");
 		var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
 		level.load(url, loaderContext);
+		
+		//Set up HUD
+		HUD = new Loader();
+		addChild(HUD);
+		var url2 = new URLRequest("../HUD/hud.swf");
+		var loaderContext2:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
+		HUD.load(url2, loaderContext2);
+		
 		
 		//Set up factions.
 		states =  new HFSM();
