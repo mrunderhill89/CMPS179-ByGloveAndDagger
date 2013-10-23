@@ -11,19 +11,40 @@
 		public var facing:int = 0;
 		public var factionName:String = "";
 
-		public function unit(f:String = ""){
+		public function unit(f:String = "") {
+			stop();
 			instances.push(this);
 			tile = null;
 			moved = false;
+			factionName = f;
+			trace("Designating " + name + " under faction " + factionName);
+			if (stage) {
+				initialize();
+			} else {
+				addEventListener(Event.ADDED_TO_STAGE,initialize);
+			}
+		}
+		private function initialize(e:Event = null):void {
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
 			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
 			addEventListener(MouseEvent.CLICK, _mouseClick);
 			addEventListener(UnitEvent.UNIT_CLICKED, _indirectClick);
-			factionName = f;
-			trace("Designating " + name + " under faction " + factionName);
+			//Find tile and set its unit to this.
+			var x_dist:Number;
+			var y_dist:Number;
+			for (var ti:String in tile_default.getInstances()){
+				var t:tile_default = tile_default.getInstances()[ti];
+				if (t != null){
+					x_dist = t.x - this.x;
+					y_dist = t.y - this.y;
+					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
+						t.setUnit(this);
+						setTile(t);
+					}
+				}
+			}
 		}
-		
-		private function _onUpdate():void
+		private function _onUpdate(e:Event):void
 		{
 			
 			if (this.facing == 0) {

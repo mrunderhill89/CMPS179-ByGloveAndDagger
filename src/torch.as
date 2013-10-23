@@ -7,7 +7,7 @@
 		
 		
 		public function torch() {
-			// constructor code
+			super();
 		}
 	}
 	

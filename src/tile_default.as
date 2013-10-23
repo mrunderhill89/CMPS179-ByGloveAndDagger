@@ -12,6 +12,7 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
+	import DataStructures.PriorityQueue.PriorityQueue;
 	
 	public class tile_default extends SimpleButton {
 		
@@ -30,27 +31,38 @@
 		public static const Y_SNAP:Number = 0.1;
 		protected static var tile_index:int = 0;
 		protected static var tiles:Array = new Array();
+		public static function getInstances():Array {
+			return tiles;
+		}
 
 		protected var neighbors:Array;
 		protected var elements:Array;
 		protected var un:unit = null;
+		public function setUnit(u:unit):void {
+			un = u;
+		}
+		
+		//For distance calculations. If dist <= this, we can't get there.
+		protected var dist:int = Infinity;
+		protected var previous:tile_default = null;
 		
 		protected var id:int;
 		
 		protected var text:TextField;
 		
+		public static var highlighting:Boolean = true;
+		
 		protected static var currentTile:tile_default = null;
 		public static function getCurrentTile():tile_default {
 			return currentTile;
 		}
-		public static var highlighting:Boolean = true;
+		
 		public function tile_default() {
 			id = tile_index;
 			tile_index++;
 			neighbors = new Array();
 			elements = new Array();
-			if (this is tile_default)
-				tiles.push(this);
+			tiles.push(this);
 			if (stage) {
 				initialize();
 			} else {
@@ -75,22 +87,19 @@
 					}
 				}
 			}
-
-			//Find units and set their tile to this.
-			//trace("Adding units...");
+			
+			//Find units and attach to this tile if appropriate.
 			for (var ui:String in unit.getInstances()){
 				var u:unit = unit.getInstances()[ui];
 				if (u != null){
-					trace("Adding unit:"+ u.name + " to tile:" + id); 
 					x_dist = u.x - this.x;
 					y_dist = u.y - this.y;
-					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
+					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
+						setUnit(u);
 						u.setTile(this);
-						this.un = u;
 					}
 				}
 			}
-
 			//Generate debug text on each tile
 			text = new TextField();
 			text.text = this.id.toString();
@@ -180,11 +189,63 @@
 					text.appendText(COORDICONS[d]);
 				}
 			}
+			if (un != null) {
+				text.appendText("<" + un.name + ">");
+			}
+			if (elements.length > 0) {
+				for (var el:String in elements) {
+					var element:tile_element = elements[el];
+					text.appendText("("+ element.name +")");
+				}
+			}
 			if (currentTile == this && highlighting) {
 				highlight();
 			} else {
 				dehighlight();
 			}
+		}
+		
+		/* Use Dijkstra's algorithm to build the shortest path
+		/* From "from" to "to". Returns the distance between them,
+		 * or INFINITE_DISTANCE if there's no available path between them.
+		 * More importantly, it creates a reversed path from 
+		 */
+		public function pathfind(to:tile_default, graph:Array, vertDist:Function, maxRange:int = Infinity):int {
+			var queue:PriorityQueue = new PriorityQueue();
+			var vt:tile_default;
+			var d:int;
+			for (var v:String in graph) {
+				vt = graph[v];
+				vt.previous = null;
+				if (vt == this) {
+					this.dist = 0; //Source is always dist=0.
+				} else {
+					vt.dist = Infinity;
+				}
+				queue.insert(vt, vt.dist);
+			}
+			while (queue.getLength() > 0){
+				vt = queue.getMin() as tile_default;
+				queue.removeMin();
+				if (vt.dist == Infinity){
+					break ;                                           
+				}
+				for (var ni:String in vt.neighbors) {
+					var n:tile_default = vt.neighbors[ni];
+					d = vt.dist + vertDist.apply(n);
+					if (d < n.dist && d < maxRange){
+						n.dist = d;
+						n.previous = vt;
+						queue.decreaseKey(queue.find(n), d);
+					}
+				}
+			}
+			return to.dist;
+		}
+		
+		//For normal movement, each edge has a distance of just 1.
+		public function constantVert(t:tile_default):int {
+			return 1;
 		}
 	}
 }
