@@ -37,16 +37,12 @@
 
 		protected var neighbors:Array;
 		protected var elements:Array;
-		protected var un:unit = null;
-		public function setUnit(u:unit):void {
-			un = u;
-		}
-		
+				
 		//For distance calculations. If dist <= this, we can't get there.
 		protected var dist:int = Infinity;
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
-		public var currUnit:unit;
+		public var currUnit:unit = null;
 		
 		protected var id:int;
 		
@@ -170,16 +166,16 @@
 		{
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
-			if (this.un != null && !selecting) {
+			if (this.currUnit!= null && !selecting) {
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
 				setUnit(this.un);
 				selecting = true;
-				this.un = null;
+				this.currUnit= null;
 			}
 			if (selecting) {
 				var u:unit = this.getUnit();
 				//if it is within the bounds
-				this.un = u;
+				this.currUnit= u;
 				u.setTile(this)
 				u.x = this.x;
 				u.y = this.y;
@@ -205,7 +201,7 @@
 					text.appendText(COORDICONS[d]);
 				}
 			}
-			if (un != null) {
+			if (currUnit!= null) {
 				text.appendText("<" + un.name + ">");
 			}
 			if (elements.length > 0) {
@@ -223,7 +219,6 @@
 		public function setUnit(u:unit):void
 		{
 			currUnit = u;
-			un = u;
 		}
 		public function getUnit():unit
 		{
