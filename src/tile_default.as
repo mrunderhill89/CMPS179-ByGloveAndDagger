@@ -162,7 +162,7 @@
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
 			if (this.un != null && !selecting) {
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
-				saveUnit(this.un);
+				setUnit(this.un);
 				selecting = true;
 				this.un = null;
 			}
