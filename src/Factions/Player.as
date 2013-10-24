@@ -44,8 +44,8 @@ package Factions
 			unitAction.setExitAction(unitExit);
 			
 			Game.getInstance().getLevel().addEventListener(Event.ADDED_TO_STAGE, loadUnits);
-			//Game.getInstance().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
-			//Game.getInstance().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
+			//Game.getInstance().getLevel().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
+			//Game.getInstance().getLevel().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
 			
 		}
 		

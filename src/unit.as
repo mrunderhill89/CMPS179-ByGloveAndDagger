@@ -80,15 +80,11 @@
 		
 		public function _indirectClick(ue:UnitEvent):void {
 			trace("Unit Clicked:" + name);
-			if (!selecting) {
-				selecting = true;
-				var t:tile_default = this.getTile();
-				t.un = null;
-				this.tile = null;				
-			}
 		}
+		
 		public function move(tile:tile_default):void
 		{
+			this.tile.setUnit(null);
 			tile.setUnit(this);
 			setTile(tile);
 			this.x = tile.x;

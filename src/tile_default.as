@@ -2,6 +2,7 @@
 	
 	import flash.display.SimpleButton;
 	import flash.events.MouseEvent;
+	import flash.utils.Dictionary;
 	import flashx.textLayout.formats.Float;
 	import flashx.textLayout.elements.ListElement;
 	import flash.geom.Point;
@@ -10,6 +11,7 @@
 	import flash.events.MouseEvent;
 	import flash.display.DisplayObject;
 	import flash.utils.getQualifiedClassName;
+	import flash.utils.Dictionary;
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
 	import DataStructures.PriorityQueue.PriorityQueue;
@@ -37,6 +39,15 @@
 
 		protected var neighbors:Array;
 		protected var elements:Array;
+		protected var flags:Dictionary;
+		public function setFlag(name:String, value:int = 1):void{
+			this.flags[name] = value;
+		}
+		public function getFlag(name:String):Boolean{
+			if (this.flags[name] != null && this.flags[name] != 0)
+				return true;
+			return false;
+		}
 				
 		//For distance calculations. If dist <= this, we can't get there.
 		protected var dist:int = Infinity;
@@ -61,6 +72,7 @@
 			tile_index++;
 			neighbors = new Array();
 			elements = new Array();
+			flags = new Dictionary();
 			tiles.push(this);
 			if (stage) {
 				initialize();
@@ -188,7 +200,12 @@
 
 		public function highlight(): void {
 			var myColorTransform:ColorTransform = new ColorTransform();
-			myColorTransform.color = 0x1133FF;
+			if (getFlag("mouseCursor")){
+				myColorTransform.color = 0x1133FF;
+			} else if (getFlag("movementRange")){
+			} else if (getFlag("attackRange")){
+			} else if (getFlag("visualRange")){
+			}
 			this.transform.colorTransform = myColorTransform;			
 		}
 		
@@ -210,10 +227,11 @@
 				}
 			}
 			if (currentTile == this && highlighting) {
-				highlight();
+				setFlag("mouseCursor",1);
 			} else {
-				dehighlight();
+				setFlag("mouseCursor",0);
 			}
+			highlight();
 		}
 		public function setUnit(u:unit):void
 		{

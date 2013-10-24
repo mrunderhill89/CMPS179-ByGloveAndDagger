@@ -11,6 +11,7 @@
 			tile = null;
 			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
 			addEventListener(MouseEvent.CLICK, _mouseOver);
+			addEventListener(UnitEvent.UNIT_APPROACH_TILE, _unitApproach);
 		}
 		
 		public static function getInstances():Array{
@@ -36,6 +37,9 @@
 			}
 		}
 		
+		public function _unitApproach( ue:UnitEvent ):void{
+			trace(name + " approached by " + ue.un.name);
+		}
 	}
 	
 }
