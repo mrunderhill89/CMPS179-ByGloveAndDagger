@@ -79,7 +79,7 @@
 		}
 		
 		public function _indirectClick(ue:UnitEvent):void {
-			//trace("Unit Clicked:" + name);
+			trace("Unit Clicked:" + name);
 			if (!selecting) {
 				selecting = true;
 				var t:tile_default = this.getTile();
@@ -87,9 +87,13 @@
 				this.tile = null;				
 			}
 		}
-		public function setNewTile():void
+		public function move(tile:tile_default):void
 		{
-			
+			tile.setUnit(this);
+			setTile(tile);
+			this.x = tile.x;
+			this.y = tile.y;
+			selecting = false;
 		}
 		
 		public function hasMoved():Boolean {

@@ -16,7 +16,8 @@ package Factions
 	public class Player extends Faction 
 	{
 		protected var cameraVelocity:Point = new Point(0, 0);
-		protected var cameraBounds:Rectangle = new Rectangle(0,0,0,0);
+		protected var cameraBounds:Rectangle = new Rectangle(0, 0, 0, 0);
+		protected var currentUnit:unit = null;
 		public function Player(p:HFSM, makeInitial:Boolean = false) 
 		{
 			super("Player", p, makeInitial);
@@ -24,6 +25,9 @@ package Factions
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
 			select.setExitAction(selectExit);
+			
+			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; }, function():void { trace("Unit Selected"); } );
+			var moveToSelect:Transition = new Transition(move, select, function():Boolean { return currentUnit ==  null; }, function():void { trace("Unit Deselected"); } );
 			/*
 			var unitSelected:EventTransition = new EventTransition(select, move, UnitEvent.UNIT_CLICKED
 															, function(): void { trace("Unit Selected"); } ); 
@@ -40,6 +44,9 @@ package Factions
 			unitAction.setExitAction(unitExit);
 			
 			Game.getInstance().getLevel().addEventListener(Event.ADDED_TO_STAGE, loadUnits);
+			//Game.getInstance().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
+			//Game.getInstance().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
+			
 		}
 		
 		public function loadUnits( e:Event):void {
@@ -63,6 +70,23 @@ package Factions
 		public function selectUpdate():void {
 		}
 
+		protected function _selectUnit(ue:UnitEvent):void {
+			if (currentUnit == null && select.isActive()) {
+				if (ue.un.factionName == name) {
+					currentUnit = ue.un;
+				}
+			}
+		}
+
+		protected function _selectTile(te:TileEvent):void {
+			if (move.isActive()) {
+				if (te.getTile().getUnit() == null) {
+					currentUnit.move(te.tile);
+					currentUnit = null;
+				}
+			}
+		}
+		
 		public function selectExit():void {
 		}
 		

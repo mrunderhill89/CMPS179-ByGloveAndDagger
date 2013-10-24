@@ -12,6 +12,7 @@ package
 	import flash.display.Sprite;
     import flash.events.Event;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
     import flash.text.TextField;
     import flash.text.TextFormat;
 	import flash.net.URLRequest;
@@ -108,9 +109,7 @@ package
 		HUD = new Loader();
 		addChild(HUD);
 		var url2:URLRequest = new URLRequest("../HUD/hud.swf");
-		var loaderContext2:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
-		HUD.load(url2, loaderContext2);
-		
+		HUD.load(url2, loaderContext);
 		
 		//Set up factions.
 		states =  new HFSM();

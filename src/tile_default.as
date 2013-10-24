@@ -42,7 +42,6 @@
 		protected var dist:int = Infinity;
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
-		public var currUnit:unit = null;
 		public var un:unit = null;
 		public static var highlighting:Boolean = true;
 		
@@ -176,11 +175,7 @@
 				var u:unit = unit.getInstances()[ui];
 					if (u != null) {
 						if (u.selecting) {
-							this.un = u;
-							u.setTile(this);
-							u.x = this.x;
-							u.y = this.y;
-							u.selecting = false;
+							u.move(this);
 						}
 					}
 				}
@@ -223,11 +218,11 @@
 		}
 		public function setUnit(u:unit):void
 		{
-			currUnit = u;
+			un = u;
 		}
 		public function getUnit():unit
 		{
-			return currUnit;
+			return un;
 		}
 
 		/* Use Dijkstra's algorithm to build the shortest path

@@ -7,7 +7,7 @@
 		
 		
 		public function unit_guard() {
-			super("guard");
+			super("Enemy");
 		}
 	}
 	

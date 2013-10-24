@@ -20,5 +20,9 @@
 			super(type, bubbles, cancelable);
 			tile = t;
 		}	
+		
+		public function getTile():tile_default {
+			return tile;
+		}
     }
 }
