@@ -107,7 +107,7 @@ package
 		//Set up HUD
 		HUD = new Loader();
 		addChild(HUD);
-		var url2 = new URLRequest("../HUD/hud.swf");
+		var url2:URLRequest = new URLRequest("../HUD/hud.swf");
 		var loaderContext2:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
 		HUD.load(url2, loaderContext2);
 		
