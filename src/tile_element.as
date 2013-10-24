@@ -27,12 +27,12 @@
 		
 		public function _mouseOver( me:MouseEvent):void {
 			if (tile != null) {
-				tile._mouseOver(me);
+				tile.dispatchEvent(me);
 			}
 		}
 		public function _mouseClick( me:MouseEvent):void {
 			if (tile != null) {
-				tile._mouseClick(me);
+				tile.dispatchEvent(me);
 			}
 		}
 		

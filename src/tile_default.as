@@ -43,6 +43,7 @@
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
 		public var un:unit = null;
+		public static var currUnit:unit = null;
 		public static var highlighting:Boolean = true;
 		
 		protected var id:int;
@@ -167,17 +168,15 @@
 		{
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
-			if (this.un != null && !this.un.selecting) {
-				trace("selecting = true");
+			if (this.un != null) {
+				if (currUnit != null) {
+					currUnit.selecting = false;
+				}
+				currUnit = this.un;
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
-			}else {
-				for (var ui:String in unit.getInstances()){
-				var u:unit = unit.getInstances()[ui];
-					if (u != null) {
-						if (u.selecting) {
-							u.move(this);
-						}
-					}
+			} else {
+				if (currUnit != null) {
+					currUnit.move(this);
 				}
 			}
 		}
