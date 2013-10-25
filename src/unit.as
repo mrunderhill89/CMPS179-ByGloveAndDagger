@@ -18,7 +18,6 @@
 			tile = null;
 			moved = false;
 			factionName = f;
-			trace("Designating " + name + " under faction " + factionName);
 			if (stage) {
 				initialize();
 			} else {
@@ -41,7 +40,6 @@
 					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
 						setTile(t);
 						t.un = this;
-						trace("adding" + this.name + "to");
 					}
 				}
 			}

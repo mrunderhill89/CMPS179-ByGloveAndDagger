@@ -12,5 +12,8 @@ package DataStructures.PriorityQueue
 			priority = p;
 			data = d;
 		}
+		public function toString():String {
+			return "Data:" + data.toString() + "\nPriority:" + priority.toString();
+		}
 	}
 }

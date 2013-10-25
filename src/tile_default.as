@@ -50,7 +50,7 @@
 		}
 				
 		//For distance calculations. If dist <= this, we can't get there.
-		protected var dist:int = Infinity;
+		protected var dist:Number = Infinity;
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
 		public var un:unit = null;
@@ -100,11 +100,9 @@
 			}
 			
 			//Find units and attach to this tile if appropriate.
-			trace("adding units");
 			for (var ui:String in unit.getInstances()){
 				var u:unit = unit.getInstances()[ui];
 				if (u != null){
-					trace("Adding unit:"+ u.name + " to tile:" + id); 
 					x_dist = u.x - this.x;
 					y_dist = u.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
@@ -185,10 +183,13 @@
 					currUnit.selecting = false;
 				}
 				currUnit = this.un;
+				calculateMovementRange(this);
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
 			} else {
 				if (currUnit != null) {
 					currUnit.move(this);
+					clearMovementRange();
+					currUnit = null;
 				}
 			}
 		}
@@ -201,10 +202,13 @@
 		public function highlight(): void {
 			var myColorTransform:ColorTransform = new ColorTransform();
 			if (getFlag("mouseCursor")){
+				myColorTransform.color = 0x11FF33;
+			} else if (getFlag("movementRange")) {
 				myColorTransform.color = 0x1133FF;
-			} else if (getFlag("movementRange")){
-			} else if (getFlag("attackRange")){
-			} else if (getFlag("visualRange")){
+			} else if (getFlag("attackRange")) {
+				myColorTransform.color = 0xFF1133;
+			} else if (getFlag("visualRange")) {
+				myColorTransform.color = 0xFF9933;
 			}
 			this.transform.colorTransform = myColorTransform;			
 		}
@@ -227,7 +231,7 @@
 				}
 			}
 			if (currentTile == this && highlighting) {
-				setFlag("mouseCursor",1);
+				setFlag("mouseCursor", 1);
 			} else {
 				setFlag("mouseCursor",0);
 			}
@@ -250,39 +254,79 @@
 		public function pathfind(to:tile_default, graph:Array, vertDist:Function, maxRange:int = Infinity):int {
 			var queue:PriorityQueue = new PriorityQueue();
 			var vt:tile_default;
-			var d:int;
+			var d:Number = 0.0;
 			for (var v:String in graph) {
 				vt = graph[v];
 				vt.previous = null;
-				if (vt == this) {
-					this.dist = 0; //Source is always dist=0.
-				} else {
-					vt.dist = Infinity;
-				}
+				vt.dist = Infinity;
 				queue.insert(vt, vt.dist);
 			}
+			//Source is always distance 0.
+			this.dist = 0;
+			queue.decreaseKey(queue.find(this), 0);
 			while (queue.getLength() > 0){
 				vt = queue.getMin() as tile_default;
+				trace("Tile " + vt.id + " has distance " + vt.dist);
 				queue.removeMin();
 				if (vt.dist == Infinity){
 					break ;                                           
 				}
-				for (var ni:String in vt.neighbors) {
+				trace("Relaxing neighbors...");
+				for (var ni:int = 0; ni < 4; ni++ ) {
 					var n:tile_default = vt.neighbors[ni];
-					d = vt.dist + vertDist.apply(n);
-					if (d < n.dist && d < maxRange){
-						n.dist = d;
-						n.previous = vt;
-						queue.decreaseKey(queue.find(n), d);
+					if (n != null){
+						d = vt.dist + Math.max(vertDist.apply(n, [n]), 1.0);
+						if (d < n.dist){
+							trace("Calculated distance " + d + " between " + vt + " and " + n);
+							n.dist = d;
+							n.previous = vt;
+							queue.decreaseKey(queue.find(n), d);
+						} else if (n.dist < Infinity){
+							trace("Already a path between " + vt + " and " + n);
+						}
 					}
 				}
 			}
+			if (to == null)
+				return Infinity; //We don't have a goal, just calculate distances.
 			return to.dist;
 		}
 		
 		//For normal movement, each edge has a distance of just 1.
-		public function constantVert(t:tile_default):int {
+		public static function constantVert(t:tile_default):Number {
 			return 1;
+		}
+		
+		public static function clearMovementRange():void {
+			var tl:tile_default;
+			for (var ti:String in tiles) {
+				tl = tiles[ti];
+				tl.setFlag("movementRange", 0);
+				tl.setFlag("attackRange", 0);
+				tl.setFlag("visibleRange", 0);
+			}
+		}
+		
+		public static function calculateMovementRange(center:tile_default):void {
+			center.pathfind(null, tiles, constantVert);
+			var tl:tile_default;
+			clearMovementRange();
+			for (var ti:String in tiles) {
+				tl = tiles[ti];
+				if (tl.dist < Infinity){
+						tl.setFlag("visibleRange");
+						if (tl.dist < 4) {
+							tl.setFlag("attackRange");
+							if (tl.dist < 3) {
+								tl.setFlag("movementRange");
+							}
+						}
+				}
+			}
+		}
+		
+		public override function toString():String {
+			return "Tile #"+id.toString();
 		}
 	}
 }
