@@ -1,7 +1,8 @@
-package Factions 
+﻿package Factions 
 {
 	import HFSM.HFSM;
 	import HFSM.Transition;
+	import flash.display.MovieClip;
 	
 	/**
 	 * ...
@@ -14,11 +15,11 @@ package Factions
 		protected var move:HFSM;
 		protected var unitAction:HFSM;
 
-		public function Faction(n:String = "root", p:HFSM = null, makeInitial:Boolean = false) {
-			super(n, p, makeInitial);
+		public function Faction(n:String = "root", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) {
+			super(n, p, c, makeInitial);
 			units = new Array();
 			this.onEntry = startTurn;
-			select = new HFSM("select", this, true);
+			select = new HFSM("select", this, null, true);
 			move = new HFSM("move", this);
 			unitAction = new HFSM("action", this);
 			setEntryAction(startTurn);

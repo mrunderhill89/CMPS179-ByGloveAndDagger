@@ -1,4 +1,4 @@
-package Factions 
+﻿package Factions 
 {
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -9,6 +9,8 @@ package Factions
 	import flash.geom.Point;
 	import flash.display.Loader;
 	import tile_default;
+	import flash.display.MovieClip;
+
 	/**
 	 * ...
 	 * @author Kevin
@@ -18,9 +20,9 @@ package Factions
 		protected var cameraVelocity:Point = new Point(0, 0);
 		protected var cameraBounds:Rectangle = new Rectangle(0, 0, 0, 0);
 		protected var currentUnit:unit = null;
-		public function Player(p:HFSM, makeInitial:Boolean = false) 
+		public function Player(p:HFSM, c:MovieClip = null, makeInitial:Boolean = false) 
 		{
-			super("Player", p, makeInitial);
+			super("Player", p, clip, makeInitial);
 			setExitAction(exit);
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
@@ -43,7 +45,7 @@ package Factions
 			unitAction.setUpdateAction(unitUpdate);
 			unitAction.setExitAction(unitExit);
 			
-			Game.getInstance().getLevel().addEventListener(Event.COMPLETE, loadUnits);
+			clip.addEventListener(Event.COMPLETE, loadUnits);
 			//Game.getInstance().getLevel().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			//Game.getInstance().getLevel().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
 			
@@ -68,6 +70,7 @@ package Factions
 		}
 		
 		public function selectUpdate():void {
+			scrollCamera();
 		}
 
 		protected function _selectUnit(ue:UnitEvent):void {
@@ -91,21 +94,21 @@ package Factions
 		}
 		
 		public function scrollCamera():void {
-			var game:Game = Game.getInstance();
-			var gameLevel:Loader = game.getLevel();
-			if (gameLevel != null) {
-				gameLevel.x = Math.max(gameLevel.x + cameraVelocity.x, 0);
-				gameLevel.y = Math.max(gameLevel.y + cameraVelocity.y, 0);
-				if (game.mouseX < game.stage.stageWidth / 10) {
+			if (clip != null) {
+				clip.x += cameraVelocity.x;
+				clip.y += cameraVelocity.y;
+				var mouseX:int = clip.stage.mouseX;
+				var mouseY:int = clip.stage.mouseY;
+				if (mouseX < clip.stage.stageWidth / 10) {
 					cameraVelocity.x = +10;
-				} else if (game.mouseX > (game.stage.stageWidth * 9) / 10) {
+				} else if (mouseX > (clip.stage.stageWidth * 9) / 10) {
 					cameraVelocity.x = -10;
 				} else {
 					cameraVelocity.x = 0;
 				}
-				if (game.mouseY < game.stage.stageHeight / 10) {
+				if (mouseY < clip.stage.stageHeight / 10) {
 					cameraVelocity.y = +10;
-				} else if (game.mouseY > (game.stage.stageHeight * 9) / 10) {
+				} else if (mouseY > (clip.stage.stageHeight * 9) / 10) {
 					cameraVelocity.y = -10;
 				} else {
 					cameraVelocity.y = -0;

@@ -31,8 +31,8 @@ package
 
 	public class Game extends Sprite
    {
- 	protected var states:HFSM;
 	protected var level:Loader;
+	protected var states:HFSM;
 	protected var HUD:Loader;
 	protected var cameraVelocity:Point = new Point(0,0);
 	protected var debug:TextField;

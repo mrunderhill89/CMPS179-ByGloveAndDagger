@@ -1,8 +1,10 @@
-package HFSM 
+﻿package HFSM 
 {
 	import flash.utils.Dictionary;
 	import HFSM.Result;
 	import HFSM.Transition;
+	import flash.display.MovieClip;
+
 	/**
 	 * ...
 	 * @author Kevin
@@ -30,9 +32,9 @@ package HFSM
 		protected var initial:HFSM;
 		protected var parent:HFSM;
 		protected var level:int;
-		
+		protected var clip:MovieClip;
 		//Creates a sub-machine using another HState as a parent
-		public function HFSM(n:String = "root", p:HFSM = null, makeInitial:Boolean = false) {
+		public function HFSM(n:String = "root", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) {
 			subStates = new Dictionary();
 			transitions = new Array();
 			onEntry = null;
@@ -44,10 +46,14 @@ package HFSM
 			name = n;
 			level = 0;			
 			name = n;
+			clip = c;
 			if (p != null){
 				//Set parent and level
 				parent = p;
 				level = p.level + 1;
+				if (clip == null){
+					clip = parent.clip;
+				}
 				//If specified or there are no other states, make this one the initial state. 
 				if (makeInitial || p.initial == null){
 					p.initial = this;
