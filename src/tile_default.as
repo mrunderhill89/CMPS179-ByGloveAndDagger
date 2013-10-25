@@ -266,23 +266,18 @@
 			queue.decreaseKey(queue.find(this), 0);
 			while (queue.getLength() > 0){
 				vt = queue.getMin() as tile_default;
-				trace("Tile " + vt.id + " has distance " + vt.dist);
 				queue.removeMin();
 				if (vt.dist == Infinity){
 					break ;                                           
 				}
-				trace("Relaxing neighbors...");
 				for (var ni:int = 0; ni < 4; ni++ ) {
 					var n:tile_default = vt.neighbors[ni];
 					if (n != null){
-						d = vt.dist + Math.max(vertDist.apply(n, [n]), 1.0);
-						if (d < n.dist){
-							trace("Calculated distance " + d + " between " + vt + " and " + n);
+						d = vt.dist + Math.max(vertDist.apply(n, [n]), 0.0);
+						if (d < n.dist && d < maxRange){
 							n.dist = d;
 							n.previous = vt;
 							queue.decreaseKey(queue.find(n), d);
-						} else if (n.dist < Infinity){
-							trace("Already a path between " + vt + " and " + n);
 						}
 					}
 				}
@@ -308,7 +303,7 @@
 		}
 		
 		public static function calculateMovementRange(center:tile_default):void {
-			center.pathfind(null, tiles, constantVert);
+			center.pathfind(null, tiles, constantVert, 5);
 			var tl:tile_default;
 			clearMovementRange();
 			for (var ti:String in tiles) {

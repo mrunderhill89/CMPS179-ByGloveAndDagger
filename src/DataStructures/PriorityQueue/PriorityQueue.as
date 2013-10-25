@@ -1,4 +1,4 @@
-package DataStructures.PriorityQueue{
+﻿package DataStructures.PriorityQueue{
 	     
 	/**
 	 * ...
@@ -9,6 +9,7 @@ package DataStructures.PriorityQueue{
     {
 		protected var values:Array;
 		protected var length:int;
+		protected static const START_AT = 0;
 		public function PriorityQueue() {
 			values = new Array();
 			length = 0;
@@ -25,20 +26,18 @@ package DataStructures.PriorityQueue{
 			length++;
 		}
 		
+		//Searches the priority queue for a specifc object.
+		//This is an O(n) operation, so use sparingly.
 		public function find(data:Object):int {
 			var entry:Entry = null;
 			//Find where object is in the queue
 			for (var e:int = 0; e < length; e++) {
 				entry = values[e];
-				if (entry.data == data) {
-					trace("Found " + data + " at slot " + e);
+				if (entry.data == data)
 					break;
-				}
 			}
-			if (e == length) {
-				trace("Did not find " + data);	
+			if (entry == null)
 				return -1;
-			}
 			return e;
 		}
 		
@@ -47,13 +46,13 @@ package DataStructures.PriorityQueue{
 			if (entry != null) {
 				if (entry.priority > priority) {
 					entry.priority = priority;
-					var p:int = Math.floor(e / 2);
-					while (e > 0 && values[p].priority > values[e].priority) {
-						trace("parent " + p + " is greater than " + e);
-						swap(e, p);
-						e = p;
-						p = Math.floor(e / 2);
-					}
+				}
+				var p:int = parent(e);
+				var f:int = e;
+				while (f > 0 && values[p].priority > values[f].priority) {
+					swap(p, f);
+					f = p;
+					p = parent(f);
 				}
 			}
 		}
@@ -63,35 +62,49 @@ package DataStructures.PriorityQueue{
 			if (entry != null) {
 				if (entry.priority < priority) {
 					entry.priority = priority;
-					var c:int = minKey(e);
-					while (c < length && values[c].priority < values[e].priority) {
-						swap(c, e);
-						e = c;
-						c = minKey(e);
-					}
+				}
+				var f:int = e;
+				var c:int = minKey(e);
+				while (c < length && values[c].priority < values[f].priority) {
+					swap(c, f);
+					f = c;
+					c = minKey(f);
 				}
 			}
 		}
 		
 		public function getMin():Object {
-			trace("get min: data=" + values[0].data + " priority=" + values[0].priority);
+			if (length <= 0)
+				return null;
 			return values[0].data;
 		}
 		
 		public function removeMin():void {
-			swap(0, length-1);
 			if (length > 0){
+				swap(0, length - 1);
 				length--;
 				increaseKey(0, values[0].priority);
 			}
 		}
 		
+		protected function parent(c:int):int{
+			return Math.floor((c-1)/2);
+		}
+		
+		protected function leftChild(p:int):int{
+			return (p*2)+1;
+		}
+
+		protected function rightChild(p:int):int{
+			return (p*2)+2;
+		}
+		
 		protected function minKey(p:int):int {
-			var left:int = 2 * p;
-			var right:int = left + 1;
+			var left:int = leftChild(p);
+			var right:int = rightChild(p);
 			if (left >= length) {
 				return length;
-			} else if (right >= length || values[left].priority < values[right].priority) {
+			} else if (right >= length || values[left].priority <= values[right].priority) {
 				return left;
 			} else {
 				return right;
@@ -106,6 +119,17 @@ package DataStructures.PriorityQueue{
 		
 		public function getLength():int {
 			return length;
+		}
+		
+		public function toString():String{
+			var out:String = "";
+			for (var e:int = 0; e < values.length; e++) {
+				out = out.concat("Entry ",e, ":", values[e],"\n");
+				if (e == length){
+					out = out.concat("(Inactive)\n");
+				}
+			}
+			return out;
 		}
     }
 }
