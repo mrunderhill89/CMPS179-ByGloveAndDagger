@@ -9,6 +9,7 @@ package
 	import Factions.Player;
 	import flash.automation.StageCaptureEvent;
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
     import flash.events.Event;
 	import flash.geom.Point;
@@ -38,6 +39,7 @@ package
 	protected var debug:TextField;
 	
 	protected static var instance:Game = null;
+	public var kongregate:*;
 	public static function getInstance():Game {
 		if (instance == null)
 			instance = new Game();
@@ -86,6 +88,11 @@ package
 	private function _onEndTurn( e:Event):void 
 		{
 		}
+		public function loadComplete(e:Event):void
+		{
+			kongregate = e.target.content;
+			kongregate.services.connect();
+		}
 	
     private function initialize(e:Event = null):void {
         removeEventListener(Event.ADDED_TO_STAGE, initialize);
@@ -97,27 +104,45 @@ package
 		debug.x = 0;
 		debug.y = 0;
 		addChild(debug);
+		//Setup Kongregate API
 		
-		//Set up level.
-		level = new Loader();
-		addChild(level);
-		var url:URLRequest = new URLRequest("../levels/level1.swf");
-		var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
-		level.load(url, loaderContext);
+		// Pull the API path from the FlashVars
+		var paramObj:Object = LoaderInfo(root.loaderInfo).parameters;
+
+		// The API path. The "shadow" API will load if testing locally. 
+		var apiPath:String = paramObj.kongregate_api_path || 
+		"http://www.kongregate.com/flash/API_AS3_Local.swf";
+
+		// Allow the API access to this SWF
+		Security.allowDomain(apiPath);
+
+		// Load the API
+		var request:URLRequest = new URLRequest(apiPath);
+		var loader:Loader = new Loader();
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+		loader.load(request);
+		this.addChild(loader);
+		
+
 		
 		//Set up HUD
 		HUD = new Loader();
 		addChild(HUD);
 		var url2:URLRequest = new URLRequest("../HUD/hud.swf");
 		HUD.load(url2, loaderContext);
-		
+		//Set up level.
+		level = new Loader();
+		addChild(level);
+		var url:URLRequest = new URLRequest("../levels/level1.swf");
+		var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
+		level.load(url, loaderContext);
 		//Set up factions.
 		states =  new HFSM();
 		var player:Player = new Player(states);
 		var guards:Faction = new Faction("Enemy", states);
-		
 		var continueGame:Boolean = true;
 		this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
+
     }
    }	   
 }

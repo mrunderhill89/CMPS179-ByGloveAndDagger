@@ -18,7 +18,6 @@ package
 
       public function Main():void
       {
-		 trace("initiated");
          if (stage) init();
          else addEventListener(Event.ADDED_TO_STAGE, init);
       }
@@ -42,7 +41,6 @@ package
 		 startLoader = new Loader();
 		 startLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, startLoaded);
 		 addChild(startLoader);
-		 trace("initiated");
 		 startLoader.load(new URLRequest("../gameScreens/startGameScreen.swf"));
 	  }
 	}
