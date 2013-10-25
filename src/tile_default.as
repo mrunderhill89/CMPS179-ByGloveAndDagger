@@ -184,7 +184,14 @@
 				}
 				currUnit = this.un;
 				calculateMovementRange(this);
-				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
+				if (!this.un.moved) {
+					currUnit = this.un;
+					calculateMovementRange(this);
+					this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
+				}
+				else {
+					trace("This unit has already moved");
+				}
 			} else {
 				if (currUnit != null) {
 					currUnit.move(this);

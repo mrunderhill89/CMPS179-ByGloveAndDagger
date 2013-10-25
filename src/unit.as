@@ -6,7 +6,7 @@
 	public class unit extends MovieClip{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
-		protected var moved:Boolean;
+		public var moved:Boolean;
 		public var facingA:Array = new Array();
 		public var facing:int = 0;
 		public var factionName:String = "";
@@ -88,6 +88,7 @@
 			this.x = tile.x;
 			this.y = tile.y;
 			selecting = false;
+			moved = true;
 		}
 		
 		public function hasMoved():Boolean {
