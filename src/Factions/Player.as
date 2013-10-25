@@ -43,7 +43,7 @@ package Factions
 			unitAction.setUpdateAction(unitUpdate);
 			unitAction.setExitAction(unitExit);
 			
-			Game.getInstance().getLevel().addEventListener(Event.ADDED_TO_STAGE, loadUnits);
+			Game.getInstance().getLevel().addEventListener(Event.COMPLETE, loadUnits);
 			//Game.getInstance().getLevel().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			//Game.getInstance().getLevel().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
 			
@@ -53,9 +53,9 @@ package Factions
 			trace ("Player loading units");
 			for (var u:String in unit.getInstances()) {
 				var un:unit = unit.getInstances()[u];
-				if (un.factionName == "thief") {
+				if (un.factionName == name) {
 					this.units.push(un);
-					trace("Adding thief unit:" + un.name);
+					trace("Adding "+name+" unit:" + un.name);
 				}
 			}
 			if (units.length <= 0) {

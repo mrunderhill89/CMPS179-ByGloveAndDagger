@@ -9,7 +9,6 @@
     {
 		protected var values:Array;
 		protected var length:int;
-		protected static const START_AT = 0;
 		public function PriorityQueue() {
 			values = new Array();
 			length = 0;

@@ -21,11 +21,15 @@ package Factions
 			select = new HFSM("select", this, true);
 			move = new HFSM("move", this);
 			unitAction = new HFSM("action", this);
-			select.setEntryAction(startTurn);
+			setEntryAction(startTurn);
 		}
 		
 		public function startTurn():void {
 			trace(name + " Phase");
+			for (var u:String in units) {
+				var un:unit = units[u];
+				//un.setHasMoved(false);
+			}
 		}
 		
 		public function noAvailableUnits():Boolean {
