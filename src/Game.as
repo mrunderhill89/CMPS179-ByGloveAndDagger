@@ -59,29 +59,6 @@ package
 	
 	private function _onUpdate( e:Event ):void
 		{
-			//Handle state machine
-			var stateActions:Array = states.update().getActions();
-			for (var ai:String in stateActions) {
-				var a:Function = stateActions[ai];
-				a.apply();
-			}
-			
-			level.x += cameraVelocity.x;
-			level.y += cameraVelocity.y;
-			if (mouseX < stage.stageWidth / 10) {
-				cameraVelocity.x = +10;
-			} else if (mouseX > (stage.stageWidth * 9) / 10) {
-				cameraVelocity.x = -10;
-			} else {
-				cameraVelocity.x = 0;
-			}
-			if (mouseY < stage.stageHeight / 10) {
-				cameraVelocity.y = +10;
-			} else if (mouseY > (stage.stageHeight * 9) / 10) {
-				cameraVelocity.y = -10;
-			} else {
-				cameraVelocity.y = -0;
-			}
 			debug.text = "(" + mouseX + "," + mouseY + ")" + "[" + stage.stageWidth + "," + stage.stageHeight + "]";
 		}
 		
@@ -123,26 +100,12 @@ package
 		loader.load(request);
 		this.addChild(loader);
 		
-
-		
-		//Set up HUD
-		HUD = new Loader();
-		addChild(HUD);
-		var url2:URLRequest = new URLRequest("../HUD/hud.swf");
-		HUD.load(url2, loaderContext);
 		//Set up level.
 		level = new Loader();
 		addChild(level);
 		var url:URLRequest = new URLRequest("../levels/level1.swf");
 		var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain, null);
 		level.load(url, loaderContext);
-		//Set up factions.
-		states =  new HFSM();
-		var player:Player = new Player(states);
-		var guards:Faction = new Faction("Enemy", states);
-		var continueGame:Boolean = true;
-		this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
-
     }
    }	   
 }
