@@ -46,8 +46,8 @@
 			unitAction.setExitAction(unitExit);
 			
 			clip.addEventListener(Event.COMPLETE, loadUnits);
-			//Game.getInstance().getLevel().addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
-			//Game.getInstance().getLevel().addEventListener(TileEvent.TILE_CLICKED, _selectTile);
+			clip.addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
+			clip.addEventListener(TileEvent.TILE_CLICKED, _selectTile);
 			
 		}
 		
@@ -74,8 +74,8 @@
 		}
 
 		protected function _selectUnit(ue:UnitEvent):void {
-			if (currentUnit == null && select.isActive()) {
-				if (ue.un.factionName == name) {
+			if (currentUnit == null && select.isActive() && ue.un != null) {
+				if (ue.un.factionName == this.name) {
 					currentUnit = ue.un;
 				}
 			}

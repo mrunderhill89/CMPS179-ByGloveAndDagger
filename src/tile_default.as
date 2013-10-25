@@ -184,7 +184,7 @@
 				}
 				currUnit = this.un;
 				calculateMovementRange(this);
-				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED));
+				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
 			} else {
 				if (currUnit != null) {
 					currUnit.move(this);
