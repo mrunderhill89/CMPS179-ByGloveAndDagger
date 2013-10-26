@@ -42,7 +42,6 @@
 			
 			clip.addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			clip.addEventListener(TileEvent.TILE_CLICKED, _selectTile);
-			clip.dispatchEvent(new FactionEvent(this,FactionEvent.FACTION_INIT));
 		}
 		
 		public function selectEntry():void {
@@ -114,6 +113,7 @@
 		public function moveEntry():void {
 			trace("Move Unit");
 			currentUnit.calculateMovementRange();
+			this.updateVisibilities();
 		}
 		
 		public function moveUpdate():void {

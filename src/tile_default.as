@@ -49,8 +49,9 @@
 			return false;
 		}
 				
-		//For distance calculations. If dist <= this, we can't get there.
+		//For distance calculations. If dist = Infinity, we can't get there.
 		protected var dist:Number = Infinity;
+		protected var lightdist:Number = Infinity;
 		protected var previous:tile_default = null;
 		public var selecting:Boolean = false;
 		public var un:unit = null;
@@ -229,6 +230,10 @@
 			if (dist < Infinity){
 				text.appendText("(Distance:"+dist+")");
 			}
+			if (lightdist < Infinity){
+				text.appendText("{Light Distance:"+lightdist+"}");
+			}
+
 		}
 		public function setUnit(u:unit):void
 		{
@@ -244,10 +249,10 @@
 		 * or INFINITE_DISTANCE if there's no available path between them.
 		 * More importantly, it creates a reversed path from 
 		 */
-		public function pathfind(to:tile_default, graph:Array, vertDist:Function, maxRange:int = Infinity):int {
+		public function pathfind(to:tile_default, graph:Array, vertDist:Function, maxRange:Number = Infinity):Number {
 			var queue:PriorityQueue = new PriorityQueue();
 			var vt:tile_default;
-			var d:Number = 0.0;
+			var d:Number = 0;
 			for (var v:String in graph) {
 				vt = graph[v];
 				vt.previous = null;
@@ -266,7 +271,7 @@
 				for (var ni:int = 0; ni < 4; ni++ ) {
 					var n:tile_default = vt.neighbors[ni];
 					if (n != null){
-						d = vt.dist + Math.max(vertDist.apply(n, [n]), 0.0);
+						d = vt.dist + Math.max(vertDist.apply(n, [n]), 0);
 						if (d < n.dist && d < Infinity && d <= maxRange){
 							n.dist = d;
 							n.previous = vt;
@@ -301,10 +306,10 @@
 				var n:tile_default = t.neighbors[ni];
 				if (n != null){
 					if (n.hasTorch())
-						return 0.5;
+						return 5;
 				}
 			}
-			return 1.0;
+			return 10;
 		}
 		
 		public function hasTorch():Boolean{
@@ -330,6 +335,10 @@
 		
 		public function getDistance():Number{
 			return dist;
+		}
+		
+		public function setLightDistance(l:Number){
+			lightdist = l;
 		}
 		
 		public override function toString():String {

@@ -24,7 +24,6 @@
 			unitAction = new HFSM("action", this);
 			setEntryAction(startTurn);
 			clip.dispatchEvent(new FactionEvent(this, FactionEvent.FACTION_INIT));
-			loadUnits();
 		}
 		
 		public function startTurn():void {

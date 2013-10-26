@@ -13,7 +13,7 @@
 		public var factionName:String;
 		public var selecting:Boolean = false;
 		
-		public var awareness:int = 2;
+		public var awareness:int = 25;
 		public var maxHealth:int = 3;
 		public var health:int = maxHealth;
 		public var movementRange:int = 2;
@@ -128,18 +128,25 @@
 		}
 		
 		public function canSpotUnit(that:unit):Boolean{
-			this.tile.pathfind(that.tile, tile_default.getInstances(), tile_default.visibility);
-			return that.getTile().getDistance() <= this.awareness;
+			this.tile.pathfind(that.tile, 
+									  tile_default.getInstances(), 
+									  tile_default.visibility, 
+									  this.awareness*2);
+			return that.tile.getDistance() < this.awareness;
 		}
 		
 		public function calculateMovementRange():void {
 			tile_default.clearMovementRange();
 			var center:tile_default = this.getTile();			
 			var tiles:Array = tile_default.getInstances();
-			center.pathfind(null, tiles, tile_default.visibility, Infinity);
+			center.pathfind(null, 
+							tiles, 
+							tile_default.visibility, 
+							this.awareness*2);
 			for (var ti:String in tiles) {
 				tl = tiles[ti];
-				if (tl.getDistance() <= this.awareness) {
+				tl.setLightDistance(tl.getDistance());
+				if (tl.getDistance() < this.awareness) {
 					tl.setFlag("visibleFar");
 				}
 			}
