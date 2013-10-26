@@ -29,8 +29,8 @@
 
 		public static const X_SIZE:Number = 50.0;
 		public static const Y_SIZE:Number = 50.0;		
-		public static const X_SNAP:Number = 0.1;
-		public static const Y_SNAP:Number = 0.1;
+		public static const X_SNAP:Number = 2.0;
+		public static const Y_SNAP:Number = 2.0;
 		protected static var tile_index:int = 0;
 		protected static var tiles:Array = new Array();
 		public static function getInstances():Array {
@@ -107,7 +107,6 @@
 					y_dist = u.y - this.y;
 					if (Math.abs(x_dist) < X_SNAP && Math.abs(y_dist) < Y_SNAP){
 						u.setTile(this);
-						this.un = u;
 					}
 				}
 			}
@@ -192,12 +191,6 @@
 					trace("This unit has already moved");
 				}
 				*/
-			} else {
-				if (currUnit != null) {
-					currUnit.move(this);
-					clearMovementRange();
-					currUnit = null;
-				}
 			}
 		}
 		

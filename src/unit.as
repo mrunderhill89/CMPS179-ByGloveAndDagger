@@ -42,7 +42,6 @@
 					y_dist = t.y - this.y;
 					if (Math.abs(x_dist) < tile_default.X_SNAP && Math.abs(y_dist) < tile_default.Y_SNAP) {
 						setTile(t);
-						t.un = this;
 					}
 				}
 			}
@@ -66,7 +65,10 @@
 		}
 		
 		public function setTile(t:tile_default):void{
+			if (tile != null)
+				tile.setUnit(null);
 			tile = t;
+			t.setUnit(this);
 		}
 		
 		public function _mouseOver( me:MouseEvent):void {
