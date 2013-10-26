@@ -30,8 +30,8 @@
 			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
 			addEventListener(MouseEvent.CLICK, _mouseClick);
 			addEventListener(UnitEvent.UNIT_CLICKED, _indirectClick);
-			addEventListener(FactionEvent.FACTION_INIT, _registerFaction);
-			addEventListener(FactionEvent.FACTION_START_TURN, _refresh);
+			parent.addEventListener(FactionEvent.FACTION_INIT, _registerFaction);
+			parent.addEventListener(FactionEvent.FACTION_START_TURN, _refresh);
 			//Find tile and set its unit to this.
 			var x_dist:Number;
 			var y_dist:Number;
@@ -98,6 +98,7 @@
 		private function _registerFaction(fe:FactionEvent){
 			var f:Faction = fe.faction;
 			if (f != null && f.getName() == this.factionName){
+				trace("Adding "+name+" to "+f.getName());
 				f.addUnit(this);
 			}
 		}

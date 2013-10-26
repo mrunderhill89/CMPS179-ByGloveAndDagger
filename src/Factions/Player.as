@@ -69,8 +69,14 @@
 		protected function _selectTile(te:TileEvent):void {
 			if (move.isActive()) {
 				if (te.getTile().getUnit() == null) {
-					currentUnit.move(te.tile);
-					currentUnit = null;
+					if (te.getTile().getDistance() <= 2){
+						currentUnit.move(te.tile);
+						currentUnit = null;
+					} else {
+						trace("Tile is too far away.");
+					}
+				} else {
+					trace("Tile isn't empty.");
 				}
 			}
 		}

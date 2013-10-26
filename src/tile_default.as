@@ -327,6 +327,10 @@
 			}
 		}
 		
+		public function getDistance():Number{
+			return dist;
+		}
+		
 		public override function toString():String {
 			return "Tile #"+id.toString();
 		}

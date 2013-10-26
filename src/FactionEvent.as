@@ -9,7 +9,7 @@
 		public static const FACTION_END_TURN="faction_end_turn";
 		public static const FACTION_VICTORY="faction_victory";
 		
-		public function FactionEvent(f:Faction, type:String, bubbles:Boolean = false, cancel:Boolean = false) {
+		public function FactionEvent(f:Faction, type:String, bubbles:Boolean = true, cancel:Boolean = false) {
 			super(type, bubbles, cancelable);
 			faction = f;
 		}
