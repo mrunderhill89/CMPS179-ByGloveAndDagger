@@ -16,6 +16,8 @@
 		public var awareness:int = 2;
 		public var maxHealth:int = 3;
 		public var health:int = maxHealth;
+		public var movementRange:int = 2;
+		public var attackRange:int = 1;
 		
 		public function unit(f:String = "") {
 			stop();
@@ -126,8 +128,33 @@
 		}
 		
 		public function canSpotUnit(that:unit):Boolean{
-			this.tile.pathfind(that.tile, tile_default.getInstances(), tile_default.visibility, this.awareness);
-			return that.getTile().getDistance() < Infinity;
+			this.tile.pathfind(that.tile, tile_default.getInstances(), tile_default.visibility);
+			return that.getTile().getDistance() <= this.awareness;
+		}
+		
+		public function calculateMovementRange():void {
+			tile_default.clearMovementRange();
+			var center:tile_default = this.getTile();			
+			var tiles:Array = tile_default.getInstances();
+			center.pathfind(null, tiles, tile_default.visibility, Infinity);
+			for (var ti:String in tiles) {
+				tl = tiles[ti];
+				if (tl.getDistance() <= this.awareness) {
+					tl.setFlag("visibleFar");
+				}
+			}
+			//Handle movement after visibility
+			center.pathfind(null, tiles, tile_default.avoidOccupied, movementRange + attackRange);
+			var tl:tile_default;
+			for (ti in tile_default.getInstances()) {
+				tl = tiles[ti];
+				if (tl.getDistance() <= movementRange + attackRange) {
+					tl.setFlag("attackRange");
+					if (tl.getDistance() <= movementRange) {
+						tl.setFlag("movementRange");
+					}
+				}
+			}
 		}
 	}
 	

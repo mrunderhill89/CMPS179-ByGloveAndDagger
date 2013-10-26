@@ -72,8 +72,9 @@
 		protected function _selectTile(te:TileEvent):void {
 			if (move.isActive()) {
 				if (te.getTile().getUnit() == null) {
-					if (te.getTile().getDistance() <= 2){
+					if (te.getTile().getFlag("movementRange")){
 						currentUnit.move(te.tile);
+						this.updateVisibilities();
 					} else {
 						trace("Tile is too far away.");
 					}
@@ -112,7 +113,7 @@
 		
 		public function moveEntry():void {
 			trace("Move Unit");
-			tile_default.calculateMovementRange(currentUnit.getTile());
+			currentUnit.calculateMovementRange();
 		}
 		
 		public function moveUpdate():void {

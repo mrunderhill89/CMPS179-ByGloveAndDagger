@@ -191,11 +191,13 @@
 			var myColorTransform:ColorTransform = new ColorTransform();
 			if (getFlag("mouseCursor")){
 				myColorTransform.color = 0x11FF33;
+			} else if (getFlag("visibleNear")) {
+				myColorTransform.color = 0xFFEE33;
 			} else if (getFlag("movementRange")) {
 				myColorTransform.color = 0x1133FF;
 			} else if (getFlag("attackRange")) {
 				myColorTransform.color = 0xFF1133;
-			} else if (getFlag("visualRange")) {
+			} else if (getFlag("visibleFar")) {
 				myColorTransform.color = 0xFF9933;
 			}
 			this.transform.colorTransform = myColorTransform;			
@@ -224,6 +226,9 @@
 				setFlag("mouseCursor",0);
 			}
 			highlight();
+			if (dist < Infinity){
+				text.appendText("(Distance:"+dist+")");
+			}
 		}
 		public function setUnit(u:unit):void
 		{
@@ -271,12 +276,18 @@
 				}
 			}
 			if (to == null)
-				return Infinity; //We don't have a goal, just calculate distances.
+				return 0; //We don't have a goal, just calculate distances.
 			return to.dist;
 		}
 		
 		//For normal movement, each edge has a distance of just 1.
 		public static function constantVert(t:tile_default):Number {
+			return 1;
+		}
+		
+		public static function avoidOccupied(t:tile_default):Number{
+			if (t.getUnit() != null)
+				return Infinity;
 			return 1;
 		}
 		
@@ -290,10 +301,10 @@
 				var n:tile_default = t.neighbors[ni];
 				if (n != null){
 					if (n.hasTorch())
-						return 0.6;
+						return 0.5;
 				}
 			}
-			return 0.8;
+			return 1.0;
 		}
 		
 		public function hasTorch():Boolean{
@@ -312,25 +323,8 @@
 				tl = tiles[ti];
 				tl.setFlag("movementRange", 0);
 				tl.setFlag("attackRange", 0);
-				tl.setFlag("visualRange", 0);
-			}
-		}
-		
-		public static function calculateMovementRange(center:tile_default):void {
-			center.pathfind(null, tiles, constantVert, 5);
-			var tl:tile_default;
-			clearMovementRange();
-			for (var ti:String in tiles) {
-				tl = tiles[ti];
-				if (tl.dist <= 5){
-						tl.setFlag("visualRange");
-						if (tl.dist < 4) {
-							tl.setFlag("attackRange");
-							if (tl.dist < 3) {
-								tl.setFlag("movementRange");
-							}
-						}
-				}
+				tl.setFlag("visibleFar", 0);
+				tl.setFlag("visibleNear", 0);
 			}
 		}
 		
