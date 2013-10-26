@@ -30,6 +30,9 @@
 		protected var HUD:Loader;
 		protected var cameraVelocity:Point = new Point(0,0);
 		protected var debug:TextField;
+		public static const PLAYER_1_NAME = "Player";
+		public static const PLAYER_2_NAME = "Guards";
+		
 		public function Level1() {
 			if (stage) {
 				initialize();

@@ -46,6 +46,7 @@
 		
 		public function selectEntry():void {
 			trace("Select Unit");
+			currentUnit = null;
 		}
 		
 		public function selectUpdate():void {
@@ -71,13 +72,13 @@
 				if (te.getTile().getUnit() == null) {
 					if (te.getTile().getDistance() <= 2){
 						currentUnit.move(te.tile);
-						currentUnit = null;
 					} else {
 						trace("Tile is too far away.");
 					}
 				} else {
 					trace("Tile isn't empty.");
 				}
+				currentUnit = null;
 			}
 		}
 		
@@ -133,6 +134,8 @@
 		}
 		
 		public function exit():void {
+			currentUnit = null;
+			tile_default.clearMovementRange();
 			trace("End "+name+" Phase");
 		}
 		
