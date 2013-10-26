@@ -8,7 +8,6 @@
 		
 		public function unit_hero() {
 			super();
-			factionName = "thief";
 		}
 	}
 	

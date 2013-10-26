@@ -9,7 +9,8 @@
 		public var moved:Boolean;
 		public var facingA:Array = new Array();
 		public var facing:int = 0;
-		public var factionName:String = "";
+		
+		public var factionName:String;
 		public var selecting:Boolean = false;
 
 		public function unit(f:String = "") {
@@ -21,7 +22,7 @@
 			if (stage) {
 				initialize();
 			} else {
-				addEventListener(Event.ADDED_TO_STAGE,initialize);
+				stage.addEventListener(Event.COMPLETE,initialize);
 			}
 		}
 		private function initialize(e:Event = null):void {
@@ -29,6 +30,8 @@
 			addEventListener(MouseEvent.MOUSE_OVER, _mouseOver);
 			addEventListener(MouseEvent.CLICK, _mouseClick);
 			addEventListener(UnitEvent.UNIT_CLICKED, _indirectClick);
+			addEventListener(FactionEvent.FACTION_INIT, _registerFaction);
+			addEventListener(FactionEvent.FACTION_START_TURN, _refresh);
 			//Find tile and set its unit to this.
 			var x_dist:Number;
 			var y_dist:Number;
@@ -44,6 +47,7 @@
 				}
 			}
 		}
+		
 		private function _onUpdate(e:Event):void
 		{
 			
@@ -88,7 +92,25 @@
 			this.x = tile.x;
 			this.y = tile.y;
 			selecting = false;
-			moved = true;
+			setHasMoved(true);
+		}
+		
+		private function _registerFaction(fe:FactionEvent){
+			var f:Faction = fe.faction;
+			if (f != null && f.getName() == this.factionName){
+				f.addUnit(this);
+			}
+		}
+		
+		private function _refresh(fe:FactionEvent){
+			var f:Faction = fe.faction;
+			if (f != null && f.getName() == this.factionName){
+				setHasMoved(false);
+			}
+		}
+		
+		public function setHasMoved(v:Boolean){
+			moved = v;
 		}
 		
 		public function hasMoved():Boolean {

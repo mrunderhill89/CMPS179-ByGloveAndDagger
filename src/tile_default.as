@@ -179,19 +179,19 @@
 			trace("Tile Clicked:" + text.text);
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
 			if (this.un != null) {
+				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
+				/*
 				if (currUnit != null) {
 					currUnit.selecting = false;
 				}
-				currUnit = this.un;
-				calculateMovementRange(this);
 				if (!this.un.moved) {
-					currUnit = this.un;
-					calculateMovementRange(this);
-					this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
-				}
-				else {
+					//currUnit = this.un;
+					//calculateMovementRange(this);
+					
+				} else {
 					trace("This unit has already moved");
 				}
+				*/
 			} else {
 				if (currUnit != null) {
 					currUnit.move(this);
@@ -305,7 +305,7 @@
 				tl = tiles[ti];
 				tl.setFlag("movementRange", 0);
 				tl.setFlag("attackRange", 0);
-				tl.setFlag("visibleRange", 0);
+				tl.setFlag("visualRange", 0);
 			}
 		}
 		
@@ -315,8 +315,8 @@
 			clearMovementRange();
 			for (var ti:String in tiles) {
 				tl = tiles[ti];
-				if (tl.dist < Infinity){
-						tl.setFlag("visibleRange");
+				if (tl.dist <= 5){
+						tl.setFlag("visualRange");
 						if (tl.dist < 4) {
 							tl.setFlag("attackRange");
 							if (tl.dist < 3) {

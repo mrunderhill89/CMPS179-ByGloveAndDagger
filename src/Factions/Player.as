@@ -20,9 +20,9 @@
 		protected var cameraVelocity:Point = new Point(0, 0);
 		protected var cameraBounds:Rectangle = new Rectangle(0, 0, 0, 0);
 		protected var currentUnit:unit = null;
-		public function Player(p:HFSM, c:MovieClip = null, makeInitial:Boolean = false) 
+		public function Player(n:String = "Player", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) 
 		{
-			super("Player", p, clip, makeInitial);
+			super(n, p, c, makeInitial);
 			setExitAction(exit);
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
@@ -30,13 +30,7 @@
 			
 			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; }, function():void { trace("Unit Selected"); } );
 			var moveToSelect:Transition = new Transition(move, select, function():Boolean { return currentUnit ==  null; }, function():void { trace("Unit Deselected"); } );
-			/*
-			var unitSelected:EventTransition = new EventTransition(select, move, UnitEvent.UNIT_CLICKED
-															, function(): void { trace("Unit Selected"); } ); 
-			var allUnitsExhausted:Transition = new Transition(select, parent.getChild("Enemy"), noAvailableUnits
-															, function():void {trace("All Units Exhausted");} );
-			var endTurnManually:EventTransition = new EventTransition(select, parent.getChild("Enemy"), Game.END_TURN);
-			*/
+			
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);
 			move.setExitAction(moveExit);
@@ -45,24 +39,9 @@
 			unitAction.setUpdateAction(unitUpdate);
 			unitAction.setExitAction(unitExit);
 			
-			clip.addEventListener(Event.COMPLETE, loadUnits);
 			clip.addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			clip.addEventListener(TileEvent.TILE_CLICKED, _selectTile);
-			
-		}
-		
-		public function loadUnits( e:Event):void {
-			trace ("Player loading units");
-			for (var u:String in unit.getInstances()) {
-				var un:unit = unit.getInstances()[u];
-				if (un.factionName == name) {
-					this.units.push(un);
-					trace("Adding "+name+" unit:" + un.name);
-				}
-			}
-			if (units.length <= 0) {
-				trace("Warning, no Player units found");
-			}
+			clip.dispatchEvent(new FactionEvent(this,FactionEvent.FACTION_INIT));
 		}
 		
 		public function selectEntry():void {
@@ -76,7 +55,13 @@
 		protected function _selectUnit(ue:UnitEvent):void {
 			if (currentUnit == null && select.isActive() && ue.un != null) {
 				if (ue.un.factionName == this.name) {
-					currentUnit = ue.un;
+					if (!ue.un.hasMoved()) {
+						currentUnit = ue.un;					
+					} else {
+						trace("This unit has already moved");
+					}
+				} else {
+					trace("Unit "+ue.un.name+" does not belong to "+name);
 				}
 			}
 		}
@@ -118,6 +103,7 @@
 		
 		public function moveEntry():void {
 			trace("Move Unit");
+			tile_default.calculateMovementRange(currentUnit.getTile());
 		}
 		
 		public function moveUpdate():void {
@@ -125,7 +111,7 @@
 		}
 
 		public function moveExit():void {
-			
+			tile_default.clearMovementRange();			
 		}
 
 		public function unitEntry():void {
@@ -141,7 +127,7 @@
 		}
 		
 		public function exit():void {
-			trace("End Player Phase");
+			trace("End "+name+" Phase");
 		}
 		
 	}

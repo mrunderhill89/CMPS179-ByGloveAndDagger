@@ -63,9 +63,22 @@
 			}
 		}
 	
+		public function getName():String{
+			return name;
+		}
 	//Returns a child state by name
 		public function getChild(name:String):HFSM{
 			return subStates[name];
+		}
+		
+	//Returns the currently active state
+		public function getCurrentState():HFSM{
+			return current;
+		}
+		
+	//Forces the HFSM to switch to this state. Better to use transitions most of the time.
+		public function setCurrentState(c:HFSM){
+			current = c;
 		}
 		
 	public function update(result:Result = null):Result {

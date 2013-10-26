@@ -1,6 +1,8 @@
-package HFSM 
+﻿package HFSM 
 {
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+
 	/**
 	 * ...
 	 * @author Kevin
@@ -19,7 +21,7 @@ package HFSM
 		//Should the previous machine remember its current state?
 		protected var memory:Boolean;
 		
-		public function EventTransition(from:HFSM, to:HFSM, c:String , a:Function = null, m:Boolean = false) {
+		public function EventTransition(from:HFSM, to:HFSM, dispatcher:IEventDispatcher, c:String , a:Function = null, m:Boolean = false) {
 			target = to;
 			host = from;
 			action = a;
@@ -29,7 +31,7 @@ package HFSM
 			if (to != null)
 			 level -= to.getLevel();
 			from.addTransition(this);
-			Game.getInstance().addEventListener(condition, trigger);
+			dispatcher.addEventListener(condition, trigger);
 		}
 
 		public function getAction():Function {
