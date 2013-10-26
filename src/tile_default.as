@@ -179,18 +179,6 @@
 			dispatchEvent(new TileEvent(TileEvent.TILE_CLICKED, true, false, this));
 			if (this.un != null) {
 				this.un.dispatchEvent(new UnitEvent(UnitEvent.UNIT_CLICKED,true,false,this.un));
-				/*
-				if (currUnit != null) {
-					currUnit.selecting = false;
-				}
-				if (!this.un.moved) {
-					//currUnit = this.un;
-					//calculateMovementRange(this);
-					
-				} else {
-					trace("This unit has already moved");
-				}
-				*/
 			}
 		}
 		
@@ -274,7 +262,7 @@
 					var n:tile_default = vt.neighbors[ni];
 					if (n != null){
 						d = vt.dist + Math.max(vertDist.apply(n, [n]), 0.0);
-						if (d < n.dist && d < maxRange){
+						if (d < n.dist && d < Infinity && d <= maxRange){
 							n.dist = d;
 							n.previous = vt;
 							queue.decreaseKey(queue.find(n), d);
@@ -290,6 +278,32 @@
 		//For normal movement, each edge has a distance of just 1.
 		public static function constantVert(t:tile_default):Number {
 			return 1;
+		}
+		
+		//Return distance 0 on a torch, 0.5 if next to a torch, and 1 otherwise.
+		public static function visibility(t:tile_default):Number{
+			var elem:tile_element = null;
+			var el:String = "";
+			if (t.hasTorch())
+				return 0;
+			for (var ni:int = 0; ni < 4; ni++ ) {
+				var n:tile_default = t.neighbors[ni];
+				if (n != null){
+					if (n.hasTorch())
+						return 0.6;
+				}
+			}
+			return 0.8;
+		}
+		
+		public function hasTorch():Boolean{
+			for (var el:String in this.elements){
+				var elem:tile_element = this.elements[el];
+				if (elem is torch){
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		public static function clearMovementRange():void {

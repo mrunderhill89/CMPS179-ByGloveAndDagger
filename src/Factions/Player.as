@@ -23,13 +23,14 @@
 		public function Player(n:String = "Player", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) 
 		{
 			super(n, p, c, makeInitial);
+			setEntryAction(entry);
 			setExitAction(exit);
 			select.setEntryAction(selectEntry);
 			select.setUpdateAction(selectUpdate);
 			select.setExitAction(selectExit);
 			
-			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; }, function():void { trace("Unit Selected"); } );
-			var moveToSelect:Transition = new Transition(move, select, function():Boolean { return currentUnit ==  null; }, function():void { trace("Unit Deselected"); } );
+			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; } );
+			var moveToSelect:Transition = new Transition(move, select, function():Boolean { return currentUnit ==  null; } );
 			
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);
@@ -47,6 +48,7 @@
 		public function selectEntry():void {
 			trace("Select Unit");
 			currentUnit = null;
+			this.updateVisibilities();
 		}
 		
 		public function selectUpdate():void {
@@ -91,9 +93,9 @@
 				clip.y += cameraVelocity.y;
 				var mouseX:int = clip.stage.mouseX;
 				var mouseY:int = clip.stage.mouseY;
-				if (mouseX < clip.stage.stageWidth / 10) {
+				if (mouseX < clip.stage.stageWidth * 0.1 && mouseX > 0) {
 					cameraVelocity.x = +10;
-				} else if (mouseX > (clip.stage.stageWidth * 9) / 10) {
+				} else if (mouseX > (clip.stage.stageWidth * 0.9) && mouseX < clip.stage.stageWidth) {
 					cameraVelocity.x = -10;
 				} else {
 					cameraVelocity.x = 0;
@@ -118,7 +120,9 @@
 		}
 
 		public function moveExit():void {
-			tile_default.clearMovementRange();			
+			trace("Done Moving");
+			tile_default.clearMovementRange();
+			this.updateVisibilities();
 		}
 
 		public function unitEntry():void {
@@ -130,7 +134,12 @@
 		}
 
 		public function unitExit():void {
-			
+			this.updateVisibilities();
+		}
+		
+		public function entry():void{
+			super.startTurn();
+			this.updateVisibilities();
 		}
 		
 		public function exit():void {

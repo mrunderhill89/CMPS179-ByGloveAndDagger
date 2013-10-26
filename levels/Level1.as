@@ -53,8 +53,11 @@
 			
 			//Set up factions.
 			states =  new HFSM("root", null, this);
+			var startScreen:GameScreen = new GameScreen("StartScreen","Start",states,this,true);
 			factions["Player"] = new Player("Player", states);
 			factions["Guards"] = new Player("Guards", states);
+			trace("Factions Initialized.");
+			var startToGame:EventTransition = new EventTransition(startScreen, factions["Player"], this, "start_game");
 			
 			var playerToGuards:EventTransition = new EventTransition(factions["Player"], factions["Guards"], this, FactionEvent.FACTION_END_TURN);
 			var guardsToPlayer:EventTransition = new EventTransition(factions["Guards"], factions["Player"], this, FactionEvent.FACTION_END_TURN);

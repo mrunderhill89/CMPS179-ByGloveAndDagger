@@ -19,11 +19,12 @@
 		public function Faction(n:String = "Faction", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) {
 			super(n, p, c, makeInitial);
 			units = new Array();
-			this.onEntry = startTurn;
 			select = new HFSM("select", this, null, true);
 			move = new HFSM("move", this);
 			unitAction = new HFSM("action", this);
 			setEntryAction(startTurn);
+			clip.dispatchEvent(new FactionEvent(this, FactionEvent.FACTION_INIT));
+			loadUnits();
 		}
 		
 		public function startTurn():void {
@@ -33,6 +34,41 @@
 		
 		public function addUnit(un:unit):void{
 			units.push(un);
+		}
+		
+		public function updateVisibilities(){
+			var un:unit;
+			for (var ui:String in unit.getInstances()){
+				un = unit.getInstances()[ui];
+				if (un != null){
+					un.visible = this.canSeeUnit(un);
+				}
+			}
+		}
+		
+		public function canSeeUnit(un:unit){
+			//Players can always see their own units.
+			if (un.factionName == name)
+				return true;
+			//Units standing on torches are always visible.
+			if (un.getTile().hasTorch())
+				return true;
+			//If both checks fail, see if any of the faction's units can see the target.
+			var mu:unit;
+			for (var mui:String in this.units){
+				mu = units[mui];
+				if (mu.canSpotUnit(un))
+					return true;
+			}
+			return false;
+		}
+		
+		public function loadUnits(){
+			var un:unit;
+			for (var ui:String in unit.getInstances()){
+				un = unit.getInstances()[ui];
+				un._registerFaction(null,this);
+			}
 		}
 		
 		public function noAvailableUnits():Boolean {

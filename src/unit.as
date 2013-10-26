@@ -12,7 +12,11 @@
 		
 		public var factionName:String;
 		public var selecting:Boolean = false;
-
+		
+		public var awareness:int = 2;
+		public var maxHealth:int = 3;
+		public var health:int = maxHealth;
+		
 		public function unit(f:String = "") {
 			stop();
 			instances.push(this);
@@ -22,7 +26,7 @@
 			if (stage) {
 				initialize();
 			} else {
-				stage.addEventListener(Event.COMPLETE,initialize);
+				stage.addEventListener(Event.ADDED_TO_STAGE,initialize);
 			}
 		}
 		private function initialize(e:Event = null):void {
@@ -49,10 +53,8 @@
 		
 		private function _onUpdate(e:Event):void
 		{
-			
 			if (this.facing == 0) {
 				this.facingA[0];
-				
 			}
 		}
 		
@@ -97,11 +99,14 @@
 			setHasMoved(true);
 		}
 		
-		private function _registerFaction(fe:FactionEvent){
-			var f:Faction = fe.faction;
+		public function _registerFaction(fe:FactionEvent = null, f:Faction = null){
+			if (f == null && fe.faction != null)
+				f = fe.faction;
 			if (f != null && f.getName() == this.factionName){
 				trace("Adding "+name+" to "+f.getName());
 				f.addUnit(this);
+			} else {
+				trace("Faction "+f.getName()+" doesn't match the faction of "+name);
 			}
 		}
 		
@@ -118,6 +123,11 @@
 		
 		public function hasMoved():Boolean {
 			return moved;
+		}
+		
+		public function canSpotUnit(that:unit):Boolean{
+			this.tile.pathfind(that.tile, tile_default.getInstances(), tile_default.visibility, this.awareness);
+			return that.getTile().getDistance() < Infinity;
 		}
 	}
 	

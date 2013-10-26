@@ -13,15 +13,15 @@
 	{
 		//State attributes
 		protected var name:String;
-		protected var onEntry:Function;
+		private var onEntry:Function;
 		public function setEntryAction(f:Function):void{onEntry = f;}
 		public function getEntryAction():Function{return onEntry;}
 		
-		protected var onUpdate:Function;
+		private var onUpdate:Function;
 		public function setUpdateAction(f:Function):void{onUpdate = f;}
 		public function getUpdateAction():Function{return onUpdate;}
 		
-		protected var onExit:Function;
+		private var onExit:Function;
 		public function setExitAction(f:Function):void{onExit = f;}
 		public function getExitAction():Function{return onExit;}
 		
