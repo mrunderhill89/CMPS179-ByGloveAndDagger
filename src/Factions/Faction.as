@@ -47,6 +47,10 @@
 		}
 		
 		public function canSeeUnit(un:unit){
+			//Dead units are never visible. (Unless it's Halloween!)
+			if (!un.isAlive()){
+				return false;
+			}
 			//Players can always see their own units.
 			if (un.factionName == name)
 				return true;

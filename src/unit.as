@@ -18,6 +18,7 @@
 		public var health:int = maxHealth;
 		public var movementRange:int = 2;
 		public var attackRange:int = 1;
+		public var attacking:Boolean = false;
 		
 		public function unit(f:String = "") {
 			stop();
@@ -71,8 +72,12 @@
 		public function setTile(t:tile_default):void{
 			if (tile != null)
 				tile.setUnit(null);
+			if(t==null)
+			tile = t;
+			else{
 			tile = t;
 			t.setUnit(this);
+			}
 		}
 		
 		public function _mouseOver( me:MouseEvent):void {
@@ -97,7 +102,6 @@
 			setTile(tile);
 			this.x = tile.x;
 			this.y = tile.y;
-			selecting = false;
 			setHasMoved(true);
 		}
 		
@@ -156,6 +160,38 @@
 				}
 			}
 		}
-	}
+		public function calculateAttackRange():void {
+			tile_default.clearMovementRange();
+			var center:tile_default = this.getTile();			
+			var tiles:Array = tile_default.getInstances();
+			
+			//Handle movement after visibility
+			center.pathfind(null, tiles, tile_default.constantVert, attackRange*2);
+			var tl:tile_default;
+			for (var ti:String in tiles) {
+					tl = tiles[ti];
+					if (tl.getDistance() <= attackRange) {
+						tl.setFlag("attackRange");
+					}
+				}
+			}
+		public function deadExile():void
+		{
+			if(!isAlive()){
+				var t:tile_default = this.getTile();
+				t.setUnit(null);
+				this.setTile(null);
+				this.visible = false;
+				this.x = -20000;
+				this.y = -20000;
+			}
+		}
+		public function isAlive():Boolean{
+			return health > 0;
+		}
+		}
+		
+		
+	
 	
 }
