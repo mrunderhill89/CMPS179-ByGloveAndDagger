@@ -116,17 +116,21 @@
 		protected function _selectTile(te:TileEvent):void {
 			if (move.isActive()) {
 				if (te.getTile().getUnit() == null) {
+					
 					if (te.getTile().getFlag("movementRange")){
 						currentUnit.move(te.tile);
 						this.updateVisibilities();
+						
 					} else {
 						trace("Tile is too far away.");
 					}
-				} else {
-					trace("Tile isn't empty.");
-				}
-				currentUnit.selecting = false;
+				} else if(te.getTile().getUnit() == currentUnit) {
+						currentUnit.setHasMoved(true);
+						currentUnit.selecting = false;
+				}else{trace("Tile is already filled");}
 			}
+				
+		}
 			else if (unitAction.isActive()) {
 				if(te.getTile().getUnit() != null){
 					trace("Unit != null");

@@ -61,7 +61,7 @@
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			//Setup Kongregate API
-		/*
+		
 		// Pull the API path from the FlashVars
 		var paramObj:Object = LoaderInfo(root.loaderInfo).parameters;
 
@@ -78,7 +78,7 @@
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 		loader.load(request);
 		this.addChild(loader);
-		*/
+		
 			
 			//Set up factions.
 			states =  new HFSM("root", null, this);
