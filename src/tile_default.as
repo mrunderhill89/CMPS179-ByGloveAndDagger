@@ -296,6 +296,12 @@
 			return 1;
 		}
 		
+		public static function avoidGuards(t:tile_default):Number{
+			if (t.getUnit() != null && t.getUnit() is unit_guard)
+				return Infinity;
+			return 1;
+		}
+		
 		//Return distance 0 on a torch, 0.5 if next to a torch, and 1 otherwise.
 		public static function visibility(t:tile_default):Number{
 			var elem:tile_element = null;
@@ -343,6 +349,10 @@
 		
 		public override function toString():String {
 			return "Tile #"+id.toString();
+		}
+		
+		public function getNeighbor(d:int):tile_default{
+			return neighbors[d];
 		}
 	}
 }

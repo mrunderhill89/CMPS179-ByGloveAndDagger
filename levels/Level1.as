@@ -29,7 +29,6 @@
 		protected var factions:Dictionary = new Dictionary();
 		protected var HUD:Loader;
 		protected var cameraVelocity:Point = new Point(0,0);
-		protected var debug:TextField;
 		public static const PLAYER_1_NAME = "Player";
 		public static const PLAYER_2_NAME = "Guards";
 		
@@ -43,13 +42,6 @@
 		
 		private function initialize(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
-			
-			//Debug text field allows us to see what's going on.
-			debug = new TextField();
-			debug.text = "Debug Text";
-			debug.x = 0;
-			debug.y = 0;
-			addChild(debug);
 			
 			//Set up factions.
 			states =  new HFSM("root", null, this);

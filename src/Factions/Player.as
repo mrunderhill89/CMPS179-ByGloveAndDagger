@@ -10,6 +10,7 @@
 	import flash.display.Loader;
 	import tile_default;
 	import flash.display.MovieClip;
+	import flash.events.KeyboardEvent;
 
 	/**
 	 * ...
@@ -42,6 +43,7 @@
 			
 			clip.addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			clip.addEventListener(TileEvent.TILE_CLICKED, _selectTile);
+			clip.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyboard);
 		}
 		
 		public function selectEntry():void {
@@ -149,6 +151,13 @@
 			trace("End "+name+" Phase");
 		}
 		
+		public function _handleKeyboard(ke:KeyboardEvent){
+			if (ke.keyCode == 36){
+				//Center Camera
+				clip.x = 0;
+				clip.y = 0;
+			}
+		}
 	}
 
 }

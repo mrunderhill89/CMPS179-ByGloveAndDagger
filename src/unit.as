@@ -3,6 +3,7 @@
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
+	
 	public class unit extends MovieClip{
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
@@ -98,6 +99,7 @@
 			this.x = tile.x;
 			this.y = tile.y;
 			selecting = false;
+			dispatchEvent(new UnitEvent(UnitEvent.UNIT_APPROACH_TILE, true, false, this));
 			setHasMoved(true);
 		}
 		
@@ -128,6 +130,14 @@
 		}
 		
 		public function canSpotUnit(that:unit):Boolean{
+			//Idiot check: If two units are next to each other, then they can see each other.
+			for (var ni:int = 0; ni < 4; ni++){
+				var n:tile_default = this.tile.getNeighbor(ni);
+				if (n != null && n == that.tile){
+					//Return a shrubbery! ...I mean...
+					return true;
+				}
+			}
 			this.tile.pathfind(that.tile, 
 									  tile_default.getInstances(), 
 									  tile_default.visibility, 
@@ -151,7 +161,7 @@
 				}
 			}
 			//Handle movement after visibility
-			center.pathfind(null, tiles, tile_default.avoidOccupied, movementRange + attackRange);
+			center.pathfind(null, tiles, tile_default.avoidGuards, movementRange + attackRange);
 			var tl:tile_default;
 			for (ti in tile_default.getInstances()) {
 				tl = tiles[ti];

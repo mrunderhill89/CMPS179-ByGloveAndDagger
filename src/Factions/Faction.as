@@ -56,8 +56,9 @@
 			var mu:unit;
 			for (var mui:String in this.units){
 				mu = units[mui];
-				if (mu.canSpotUnit(un))
+				if (mu.canSpotUnit(un)){
 					return true;
+				}
 			}
 			return false;
 		}
