@@ -23,22 +23,31 @@
 	import HFSM.HFSM;
 	import flash.utils.Dictionary;
 	import flash.events.MouseEvent;
+	import flash.display.LoaderInfo;
 	
 	public class Level1 extends MovieClip {
 		protected var states:HFSM;
 		protected var factions:Dictionary = new Dictionary();
 		protected var HUD:Loader;
 		protected var cameraVelocity:Point = new Point(0,0);
+		protected static instance:Level1 = null;
+		public static function getInstance():Level1{
+			return instance;
+		}
 		public static const PLAYER_1_NAME = "Player";
 		public static const PLAYER_2_NAME = "Guards";
+		protected thiefVictory:GameScreen;
+		protected guardVictory:GameScreen;
+		
 		public var kongregate:*;
-				public function loadComplete(e:Event):void
+		public function loadComplete(e:Event):void
 		{
 			kongregate = e.target.content;
 			kongregate.services.connect();
 		}
 		
 		public function Level1() {
+			instance = this;
 			if (stage) {
 				initialize();
 			} else {
@@ -50,7 +59,7 @@
 			removeEventListener(Event.ADDED_TO_STAGE, initialize);
 			
 			//Setup Kongregate API
-		
+		/*
 		// Pull the API path from the FlashVars
 		var paramObj:Object = LoaderInfo(root.loaderInfo).parameters;
 
@@ -67,6 +76,7 @@
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 		loader.load(request);
 		this.addChild(loader);
+		*/
 			
 			//Set up factions.
 			states =  new HFSM("root", null, this);
@@ -81,6 +91,7 @@
 			
 			var continueGame:Boolean = true;
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
+			addEventListener(FactionEvent.FACTION_VICTORY, decideWinner);
 		}
 		
 		private function _onUpdate( e:Event ):void
@@ -107,6 +118,14 @@
 		
 		public function getFaction(name:String):Faction{
 			return factions[name];
+		}
+		
+		public function decideWinner(fe:FactionEvent){
+			if (fe.faction == factions["Player"]){
+				states.setCurrentState(thiefVictory);
+			} else {
+				states.setCurrentState(guardVictory);
+			}
 		}
 	}
 }

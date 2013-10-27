@@ -58,7 +58,7 @@
 			
 			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; } );
 			var moveToAttack:Transition = new Transition(move, unitAction, function():Boolean { return currentUnit.selecting == false; } );
-			var attackToSelect:Transition = new Transition(unitAction, select, function():Boolean { return currentUnit.attacking == false; } );
+			var attackToSelect:Transition = new Transition(unitAction, select, function():Boolean { return currentUnit == null || currentUnit.attacking == false; } );
 			
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);

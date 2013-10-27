@@ -12,6 +12,15 @@
 		public var facing:int = 0;
 		
 		public var factionName:String;
+		public var faction:Faction = null;
+		
+		public function getFaction():Faction{
+			return faction;
+		}
+		public function setFaction(f:Faction):void{
+			faction = f;
+		}
+		
 		public var selecting:Boolean = false;
 		
 		public var awareness:int = 25;
@@ -111,6 +120,8 @@
 				f = fe.faction;
 			if (f != null && f.getName() == this.factionName){
 				trace("Adding "+name+" to "+f.getName());
+				setFaction(f);
+				trace("Resulting faction:"+this.faction);
 				f.addUnit(this);
 			} else {
 				trace("Faction "+f.getName()+" doesn't match the faction of "+name);
