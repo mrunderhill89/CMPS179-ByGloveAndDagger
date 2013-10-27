@@ -13,7 +13,7 @@
 
 		protected function _onEntry():void{
 			trace("Entering Game Screen");
-			clip.gotoAndStop(1,"Start");
+			clip.gotoAndStop(1,scene);
 			clip.stop();
 		}
 		

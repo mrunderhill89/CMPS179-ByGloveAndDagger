@@ -1,14 +1,19 @@
 ﻿package  {
-	import Factions.Faction;
-	import HFSM.HFSM;
 	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
+	import flash.events.Event;
+	import Factions.Faction;
 	
-	public class SwitchTurnScreen extends GameScreen {
-		protected var factionTo:Faction;
-		public function SwitchTurnScreen(to:Faction, n:String = "Switch", s:String = "Scene", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) {
-			super(n,s,p,c,makeInitial);
-			factionTo = to;
+	public class SwitchTurnScreen extends HudElement {
+		public function SwitchTurnScreen() {
+			super();
+		}
+		
+		private function _onClick(me:MouseEvent=null){
+			stop();
+			//(parent as MovieClip).gotoAndStop(1, "Game");
+			trace("Switching Turns");
+			parent.dispatchEvent(new Event("turn_switch",true,false));
 		}
 	}
-	
 }

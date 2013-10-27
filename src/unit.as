@@ -212,7 +212,10 @@
 				this.x = -20000;
 				this.y = -20000;
 				if (this is unit_hero) {
-					//The guards win.
+					Level1.getInstance().dispatchEvent(
+							new FactionEvent(Level1.getInstance().getFaction("Guards"), 
+											 FactionEvent.FACTION_VICTORY)
+							);
 				}
 			}
 		}

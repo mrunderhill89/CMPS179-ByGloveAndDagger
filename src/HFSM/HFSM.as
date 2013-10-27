@@ -77,8 +77,11 @@
 		}
 		
 	//Forces the HFSM to switch to this state. Better to use transitions most of the time.
-		public function setCurrentState(c:HFSM):void{
+		public function setCurrentState(c:HFSM, doEntry:Boolean = false):void{
 			current = c;
+			if (doEntry){
+				c.getEntryAction().apply();
+			}
 		}
 		
 	public function update(result:Result = null):Result {

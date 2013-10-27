@@ -36,6 +36,8 @@
 		}
 		public static const PLAYER_1_NAME = "Player";
 		public static const PLAYER_2_NAME = "Guards";
+		protected var thiefSwitch:GameScreen;
+		protected var guardSwitch:GameScreen;
 		protected var thiefVictory:GameScreen;
 		protected var guardVictory:GameScreen;
 		
@@ -81,15 +83,23 @@
 			//Set up factions.
 			states =  new HFSM("root", null, this);
 			var startScreen:GameScreen = new GameScreen("StartScreen","Start",states,this,true);
-			thiefVictory = new GameScreen("ThiefVictory","Thief Victory", states, this);
-			guardVictory = new GameScreen("GuardVictory","Guard Victory", states, this);
 			factions["Player"] = new Player("Player", states);
 			factions["Guards"] = new Player("Guards", states);
 			trace("Factions Initialized.");
+
+			thiefSwitch = new GameScreen("ThiefSwitch","Thief Switch", states, this);
+			guardSwitch = new GameScreen("GuardSwitch","Guard Switch", states, this);
+
+			thiefVictory = new GameScreen("ThiefVictory","Thief Victory", states, this);
+			guardVictory = new GameScreen("GuardVictory","Guard Victory", states, this);
+
 			var startToGame:EventTransition = new EventTransition(startScreen, factions["Player"], this, "start_game");
 			
-			var playerToGuards:EventTransition = new EventTransition(factions["Player"], factions["Guards"], this, FactionEvent.FACTION_END_TURN);
-			var guardsToPlayer:EventTransition = new EventTransition(factions["Guards"], factions["Player"], this, FactionEvent.FACTION_END_TURN);
+			var playerToGuardSwitch:EventTransition = new EventTransition(factions["Player"], factions["Guards"], this, FactionEvent.FACTION_END_TURN);
+			//var guardSwitchToGuards:EventTransition = new EventTransition(guardSwitch, factions["Guards"], this, "turn_switch");
+			var guardsToPlayerSwitch:EventTransition = new EventTransition(factions["Guards"], factions["Player"], this, FactionEvent.FACTION_END_TURN);
+			//var playerSwitchToPlayer:EventTransition = new EventTransition(thiefSwitch, factions["Player"], this, "turn_switch");
+
 			
 			var continueGame:Boolean = true;
 			this.stage.addEventListener( Event.ENTER_FRAME, this._onUpdate );
@@ -124,9 +134,9 @@
 		
 		public function decideWinner(fe:FactionEvent){
 			if (fe.faction == factions["Player"]){
-				states.setCurrentState(thiefVictory);
+				states.setCurrentState(thiefVictory, true);
 			} else {
-				states.setCurrentState(guardVictory);
+				states.setCurrentState(guardVictory, true);
 			}
 		}
 	}
