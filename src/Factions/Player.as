@@ -71,9 +71,9 @@
 				}
 			}else if (unitAction.isActive() && ue.un != null) {
 					if (ue.un.getTile().getFlag("attackRange")) {
-						if(ue.un.getTile().getUnit() != currentUnit){
+						if(ue.un.getTile().getUnit() != currentUnit && ue.un.factionName!= currentUnit.factionName){
 							trace("Attacking Unit");
-							ue.un.health -= 3;
+							ue.un.health -= 1;
 							if(!ue.un.isAlive()){ue.un.deadExile();}
 							currentUnit.attacking = false;
 						}

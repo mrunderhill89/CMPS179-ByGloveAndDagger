@@ -7,8 +7,8 @@
 		public function unit_guard() {
 			super("Guards");
 			awareness = 15;
-			maxHealth = 5;
-			health = 5;
+			maxHealth = 3;
+			health = 3;
 			movementRange = 1;
 		}
 	}
