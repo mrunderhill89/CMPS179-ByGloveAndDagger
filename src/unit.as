@@ -15,7 +15,7 @@
 		public var selecting:Boolean = false;
 		
 		public var awareness:int = 25;
-		public var maxHealth:int = 3;
+		public var maxHealth:int = 2;
 		public var health:int = maxHealth;
 		public var movementRange:int = 2;
 		public var attackRange:int = 1;
@@ -104,6 +104,9 @@
 			this.y = tile.y;
 			tile.dispatchEvent(new UnitEvent(UnitEvent.UNIT_APPROACH_TILE, true, false, this));
 			setHasMoved(true);
+			//if (this is unit_thief &&(tile.id == 201 || tile.id == 153) && this.treasure > 0) {
+				//win game
+			//}
 		}
 		
 		public function _registerFaction(fe:FactionEvent = null, f:Faction = null){
