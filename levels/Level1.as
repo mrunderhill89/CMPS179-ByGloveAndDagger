@@ -30,14 +30,14 @@
 		protected var factions:Dictionary = new Dictionary();
 		protected var HUD:Loader;
 		protected var cameraVelocity:Point = new Point(0,0);
-		protected static instance:Level1 = null;
+		protected static var instance:Level1 = null;
 		public static function getInstance():Level1{
 			return instance;
 		}
 		public static const PLAYER_1_NAME = "Player";
 		public static const PLAYER_2_NAME = "Guards";
-		protected thiefVictory:GameScreen;
-		protected guardVictory:GameScreen;
+		protected var thiefVictory:GameScreen;
+		protected var guardVictory:GameScreen;
 		
 		public var kongregate:*;
 		public function loadComplete(e:Event):void
@@ -81,6 +81,8 @@
 			//Set up factions.
 			states =  new HFSM("root", null, this);
 			var startScreen:GameScreen = new GameScreen("StartScreen","Start",states,this,true);
+			thiefVictory = new GameScreen("ThiefVictory","Thief Victory", states, this);
+			guardVictory = new GameScreen("GuardVictory","Guard Victory", states, this);
 			factions["Player"] = new Player("Player", states);
 			factions["Guards"] = new Player("Guards", states);
 			trace("Factions Initialized.");
