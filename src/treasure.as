@@ -7,6 +7,7 @@
 		protected var collected:Boolean = false;
 		public function treasure() {
 			super();
+			stop();
 		}
 		
 		public override function _unitApproach(ue:UnitEvent):void {
@@ -14,6 +15,7 @@
 				trace("Treasure Get");
 				collected = true;
 				(ue.un as unit_thief).addTreasure();
+				this.gotoAndStop(2);
 			}
 		}
 	}

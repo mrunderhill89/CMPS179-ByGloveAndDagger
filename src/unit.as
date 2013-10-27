@@ -104,9 +104,6 @@
 			this.y = tile.y;
 			tile.dispatchEvent(new UnitEvent(UnitEvent.UNIT_APPROACH_TILE, true, false, this));
 			setHasMoved(true);
-			//if (this is unit_thief &&(tile.id == 201 || tile.id == 153) && this.treasure > 0) {
-				//win game
-			//}
 		}
 		
 		public function _registerFaction(fe:FactionEvent = null, f:Faction = null){
@@ -203,6 +200,9 @@
 				this.visible = false;
 				this.x = -20000;
 				this.y = -20000;
+				if (this is unit_hero) {
+					//The guards win.
+				}
 			}
 		}
 		public function isAlive():Boolean{
