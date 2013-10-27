@@ -7,7 +7,7 @@
 		
 		
 		public function guardwin() {
-			super()
+			super();
 		}
 	}
 	

@@ -18,7 +18,6 @@
 
 		public function unit_thief() {
 			super("Player");
-			movementRange = 9000;
 		}
 	}
 	
