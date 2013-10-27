@@ -130,7 +130,7 @@
 				}else{trace("Tile is already filled");}
 			}
 				
-		}
+		
 			else if (unitAction.isActive()) {
 				if(te.getTile().getUnit() != null){
 					trace("Unit != null");
