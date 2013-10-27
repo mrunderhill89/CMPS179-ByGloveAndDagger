@@ -31,7 +31,8 @@
 			select.setExitAction(selectExit);
 			
 			var selectToMove:Transition = new Transition(select, move, function():Boolean { return currentUnit !=  null; } );
-			var moveToSelect:Transition = new Transition(move, select, function():Boolean { return currentUnit ==  null; } );
+			var moveToAttack:Transition = new Transition(move, unitAction, function():Boolean { return currentUnit.selecting == false; } );
+			var attackToSelect:Transition = new Transition(unitAction, select, function():Boolean { return currentUnit.attacking == false; } );
 			
 			move.setEntryAction(moveEntry);
 			move.setUpdateAction(moveUpdate);
@@ -60,15 +61,30 @@
 			if (currentUnit == null && select.isActive() && ue.un != null) {
 				if (ue.un.factionName == this.name) {
 					if (!ue.un.hasMoved()) {
-						currentUnit = ue.un;					
+						currentUnit = ue.un;
+						currentUnit.selecting = true;
 					} else {
 						trace("This unit has already moved");
 					}
 				} else {
 					trace("Unit "+ue.un.name+" does not belong to "+name);
 				}
+			}else if (unitAction.isActive() && ue.un != null) {
+					if (ue.un.getTile().getFlag("attackRange")) {
+						if(ue.un.getTile().getUnit() != currentUnit){
+							trace("Attacking Unit");
+							ue.un.health -= 3;
+							if(!ue.un.isAlive()){ue.un.deadExile();}
+							currentUnit.attacking = false;
+						}
+						else{
+							trace("No Attack");
+							currentUnit.attacking = false;
+						}
+					}
+				}				
 			}
-		}
+		
 
 		protected function _selectTile(te:TileEvent):void {
 			if (move.isActive()) {
@@ -82,8 +98,18 @@
 				} else {
 					trace("Tile isn't empty.");
 				}
-				currentUnit = null;
+				currentUnit.selecting = false;
 			}
+			else if (unitAction.isActive()) {
+				if(te.getTile().getUnit() != null){
+					trace("Unit != null");
+				}
+				else {
+				trace("no attack");
+				currentUnit.attacking = false;
+				}
+			}
+			
 		}
 		
 		public function selectExit():void {
@@ -124,20 +150,25 @@
 
 		public function moveExit():void {
 			trace("Done Moving");
-			tile_default.clearMovementRange();
+			//tile_default.clearMovementRange();
 			this.updateVisibilities();
 		}
 
 		public function unitEntry():void {
 			trace("Unit Action");
+			currentUnit.calculateAttackRange();
+			currentUnit.attacking = true;
 		}
 		
 		public function unitUpdate():void {
+			scrollCamera();
 			
 		}
 
 		public function unitExit():void {
+			tile_default.clearMovementRange();
 			this.updateVisibilities();
+			currentUnit = null;
 		}
 		
 		public function entry():void{
