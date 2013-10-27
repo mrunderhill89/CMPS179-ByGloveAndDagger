@@ -21,6 +21,32 @@
 		protected var cameraVelocity:Point = new Point(0, 0);
 		protected var cameraBounds:Rectangle = new Rectangle(0, 0, 0, 0);
 		protected var currentUnit:unit = null;
+		protected var treasureCollected:int = 0;
+		protected var initialUnits:int = 0;
+		
+		public function addTreasure( v:int = 1){
+			treasureCollected += v;
+		}
+		public function getTreasure():int{
+			return treasureCollected;
+		}
+		
+		public function getRemainingUnits():int{
+			var out:int = 0;
+			var un:unit;
+			for (var ui:String in units){
+				un = units[ui];
+				if (un != null && un.isAlive()){
+					out++;
+				}
+			}
+			return out;
+		}
+
+		public function getInitialUnits():int{
+			return initialUnits;
+		}
+		
 		public function Player(n:String = "Player", p:HFSM = null, c:MovieClip = null, makeInitial:Boolean = false) 
 		{
 			super(n, p, c, makeInitial);
@@ -45,6 +71,7 @@
 			clip.addEventListener(UnitEvent.UNIT_CLICKED, _selectUnit);
 			clip.addEventListener(TileEvent.TILE_CLICKED, _selectTile);
 			clip.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyboard);
+			initialUnits = getRemainingUnits();
 		}
 		
 		public function selectEntry():void {
