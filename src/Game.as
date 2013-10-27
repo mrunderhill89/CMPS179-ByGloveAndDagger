@@ -1,4 +1,4 @@
-package 
+﻿package 
 {
 	
 	/**
@@ -65,11 +65,7 @@ package
 	private function _onEndTurn( e:Event):void 
 		{
 		}
-		public function loadComplete(e:Event):void
-		{
-			kongregate = e.target.content;
-			kongregate.services.connect();
-		}
+
 	
     private function initialize(e:Event = null):void {
         removeEventListener(Event.ADDED_TO_STAGE, initialize);
@@ -81,24 +77,7 @@ package
 		debug.x = 0;
 		debug.y = 0;
 		addChild(debug);
-		//Setup Kongregate API
-		
-		// Pull the API path from the FlashVars
-		var paramObj:Object = LoaderInfo(root.loaderInfo).parameters;
 
-		// The API path. The "shadow" API will load if testing locally. 
-		var apiPath:String = paramObj.kongregate_api_path || 
-		"http://www.kongregate.com/flash/API_AS3_Local.swf";
-
-		// Allow the API access to this SWF
-		Security.allowDomain(apiPath);
-
-		// Load the API
-		var request:URLRequest = new URLRequest(apiPath);
-		var loader:Loader = new Loader();
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
-		loader.load(request);
-		this.addChild(loader);
 		
 		//Set up level.
 		level = new Loader();
