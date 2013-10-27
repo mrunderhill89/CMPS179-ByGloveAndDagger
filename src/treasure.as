@@ -5,16 +5,15 @@
 	
 	public class treasure extends tile_element {
 		protected var collected:Boolean = false;
-		protected static var totalCollected:int = 0;
 		public function treasure() {
 			super();
 		}
 		
-		public function _onUnitApproach(ue:UnitEvent):void {
-			if (ue.un.factionName == "Player"){
+		public override function _unitApproach(ue:UnitEvent):void {
+			if (collected == false && ue.un is unit_thief){
+				trace("Treasure Get");
 				collected = true;
-				totalCollected++;
-				//(ue.un as unit_thief).addTreasure();
+				(ue.un as unit_thief).addTreasure();
 			}
 		}
 	}

@@ -14,6 +14,7 @@
 	import flash.utils.Dictionary;
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
+	import UnitEvent;
 	import DataStructures.PriorityQueue.PriorityQueue;
 	
 	public class tile_default extends SimpleButton {
@@ -159,6 +160,7 @@
 			addEventListener( MouseEvent.MOUSE_OVER, _mouseOver );
 			addEventListener( MouseEvent.MOUSE_OUT, _mouseOut );
 			addEventListener( MouseEvent.CLICK, _mouseClick);
+			addEventListener( UnitEvent.UNIT_APPROACH_TILE, _onApproach);
 		}
 		
 		public function _mouseOver( e:MouseEvent): void
@@ -353,6 +355,30 @@
 		
 		public function getNeighbor(d:int):tile_default{
 			return neighbors[d];
+		}
+		
+		public function _onApproach(ue:UnitEvent):void{
+			trace("Tile "+this+" approached.");
+			for (var ei:String in elements){
+				var el:tile_element = elements[ei];
+			    trace("    Delegating to "+el);
+				if (el != null){
+					el.dispatchEvent(new UnitEvent(ue.type, ue.bubbles, ue.cancelable, ue.un));
+				}
+			}
+		}
+		
+		public function addElement(el:tile_element){
+			elements.push(el);
+		}
+		
+		public function removeElement(el:tile_element){
+			for (var i:int = 0; i < elements.length; i++){
+				if (elements[i] == el){
+					elements.splice(i,1);
+					break;
+				}
+			}
 		}
 	}
 }

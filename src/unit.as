@@ -102,7 +102,7 @@
 			setTile(tile);
 			this.x = tile.x;
 			this.y = tile.y;
-			dispatchEvent(new UnitEvent(UnitEvent.UNIT_APPROACH_TILE, true, false, this));
+			tile.dispatchEvent(new UnitEvent(UnitEvent.UNIT_APPROACH_TILE, true, false, this));
 			setHasMoved(true);
 		}
 		

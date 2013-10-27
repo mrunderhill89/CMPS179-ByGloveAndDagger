@@ -77,7 +77,7 @@
 		}
 		
 	//Forces the HFSM to switch to this state. Better to use transitions most of the time.
-		public function setCurrentState(c:HFSM){
+		public function setCurrentState(c:HFSM):void{
 			current = c;
 		}
 		

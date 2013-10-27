@@ -1,8 +1,8 @@
 ﻿package  {
-	import flash.display.SimpleButton;
+	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	
-	public class tile_element extends SimpleButton {
+	public class tile_element extends MovieClip {
 		protected static var instances:Array = new Array();
 		protected var tile:tile_default;
 		

@@ -5,7 +5,6 @@
 	
 	public class torch extends tile_element {
 		
-		
 		public function torch() {
 			super();
 		}
